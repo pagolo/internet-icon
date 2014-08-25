@@ -35,9 +35,13 @@ typedef struct _AllIp
 {
   char *WanIp;
   IpList *LanIpList;
+  SOCKET *socket;
 } AllIp;
 
 int TestConnection (const char *ip, int port);
-AllIp * GetAllIp (void);
+AllIp *GetLanIp (void);
+AllIp *GetWanIp (AllIp *MyData);
+void FreeAllIp (AllIp *MyData);
+
 
 #endif  /*  */

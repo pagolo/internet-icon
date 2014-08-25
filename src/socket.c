@@ -119,15 +119,10 @@ get_ip_str (const struct sockaddr *sa, char *s, size_t maxlen)
 }
 
 AllIp *
-GetAllIp (void)
+GetLanIp (void)
 {
   AllIp *MyData = NULL;
   IpList *If = NULL, *IfStart = NULL, *IfPtr;
-  struct hostent *Host = { 0 };
-  struct sockaddr_in INetSocketAddr = { 0 };
-  int res;
-  const char request[] =
-    "GET /ip\r\nHTTP/1.0\r\nUser-Agent: InternetIcon/0.1\r\n\r\n";
   char buf[1024] = { 0 };
   struct ifconf ifc = { 0 };
   struct ifreq *ifr = NULL;
@@ -140,7 +135,7 @@ GetAllIp (void)
     return NULL;
 
   // Create socket 
-  int soc = socket (AF_INET, SOCK_STREAM, 0);
+  int soc = MyData->socket = socket (AF_INET, SOCK_STREAM, 0);
   if (soc < 0) {
     fprintf (stderr, "Error creating socket (%d %s)\n", errno,
              strerror (errno));
@@ -148,62 +143,8 @@ GetAllIp (void)
     return (NULL);
   }
 
-  Host = (struct hostent *) gethostbyname ("ifconfig.me");
-    if (Host == NULL) {
-    fprintf (stderr, "Error getting host address (%d %s)\n", errno,
-             strerror (errno));
-    close (soc);
-    free (MyData);
-    return (NULL);
-  }
+  MyData->WanIp = strdup("Wait please...\t<i>(<b>WAN/Public</b>)</i>");
 
-  // Trying to connect
-  res = -1;
-  for (i = 0; Host->h_addr_list[i]; i++) {
-    memcpy ((char *) &INetSocketAddr.sin_addr, Host->h_addr_list[i],
-            Host->h_length);
-    INetSocketAddr.sin_family = Host->h_addrtype;
-    INetSocketAddr.sin_port = htons (80);
-    res =
-      connect (soc, (struct sockaddr *) &INetSocketAddr,
-               sizeof (INetSocketAddr));
-    if (res == 0) {
-      break;
-    }
-  }
-  if (res < 0) {
-    fprintf (stderr, "Can't connect to site\n");
-    MyData->WanIp = strdup("Can't retrive wan ip.");
-    goto get_lan_ips;
-  }
-
-  if (write (soc, request, strlen (request)) < 1) {
-    fprintf (stderr, "request ip failed\n");
-    close (soc);
-    free (MyData);
-    return NULL;
-  }
-
-  // migliorare...
-  {
-    char buffer[IPLEN] = {0};
-    int nchars = read (soc, buffer, IPLEN);
-    if (nchars < 1) {
-      fprintf (stderr, "Can't retrive wan ip\n");
-      MyData->WanIp = strdup("Can't retrive wan ip.");
-      goto get_lan_ips;
-    }
-    {
-      char *z = strchr (buffer, '\r');
-      if (!z)
-        z = strchr (buffer, '\n');
-      if (z)
-        *z = '\0';
-    }
-    MyData->WanIp = mysprintf ("%s\t<i>(<b>WAN/Public</b>)</i>", buffer);
-  }
-
-get_lan_ips:
   /* Query available interfaces. */
   ifc.ifc_len = sizeof (buf);
   ifc.ifc_buf = buf;
@@ -233,6 +174,84 @@ get_lan_ips:
   }
   MyData->LanIpList = IfStart;
 
+  return MyData;
+}
+
+AllIp *
+GetWanIp (AllIp *MyData)
+{
+  struct hostent *Host = { 0 };
+  struct sockaddr_in INetSocketAddr = { 0 };
+  int res, i;
+  const char request[] =
+    "GET /ip\r\nHTTP/1.0\r\nUser-Agent: InternetIcon/0.1\r\n\r\n";
+
+  // free previous string
+  if (MyData->WanIp) free(MyData->WanIp);
+  MyData->WanIp = NULL;
+  
+  // get socket 
+  int soc = MyData->socket;
+
+  Host = (struct hostent *) gethostbyname ("ifconfig.me");
+    if (Host == NULL) {
+    fprintf (stderr, "Error getting host address (%d %s)\n", errno,
+             strerror (errno));
+    close (soc);
+    MyData->WanIp = strdup("<i>Can't find wan ip.</i>");
+    return MyData;
+  }
+
+  // Trying to connect
+  res = -1;
+  for (i = 0; Host->h_addr_list[i]; i++) {
+    memcpy ((char *) &INetSocketAddr.sin_addr, Host->h_addr_list[i],
+            Host->h_length);
+    INetSocketAddr.sin_family = Host->h_addrtype;
+    INetSocketAddr.sin_port = htons (80);
+    res =
+      connect (soc, (struct sockaddr *) &INetSocketAddr,
+               sizeof (INetSocketAddr));
+    if (res == 0) {
+      break;
+    }
+  }
+  if (res < 0) {
+    fprintf (stderr, "Can't connect to site\n");
+    close (soc);
+    MyData->WanIp = strdup("Can't retrive wan ip.");
+    return MyData;
+  }
+
+  if (write (soc, request, strlen (request)) < 1) {
+    fprintf (stderr, "request ip failed\n");
+    close (soc);
+    MyData->WanIp = strdup("<i>Can't find wan ip.</i>");
+    return MyData;
+  }
+
+  {
+    char buffer[IPLEN] = {0};
+    int nchars = read (soc, buffer, IPLEN);
+    if (nchars < 1) {
+      fprintf (stderr, "Can't retrive wan ip\n");
+      MyData->WanIp = strdup("Can't retrive wan ip.");
+      return MyData;
+    }
+    {
+      char *z = strchr (buffer, '\r');
+      if (!z)
+        z = strchr (buffer, '\n');
+      if (z)
+        *z = '\0';
+    }
+    MyData->WanIp = mysprintf ("%s\t<i>(<b>WAN/Public</b>)</i>", buffer);
+  }
+  
   close (soc);
   return MyData;
+}
+
+void FreeAllIp (AllIp *MyData)
+{
 }

@@ -119,26 +119,30 @@ static gchar *build_dialog_string (AllIp *MyData)
   return g_strjoinv ("\n", array);
 }
                                   
+enum {
+  _DIALOG, _MYDATA
+};
+
 static gboolean
 set_dialog_content (gpointer data)
 {
-  GtkWidget *dialog = (GtkWidget *) data;
-  AllIp *MyData;
-  gint socket = -1;
+  void **transmit = data;
+  GtkWidget *dialog = (GtkWidget *) transmit[_DIALOG];
+  AllIp *MyData = (AllIp *) transmit[_MYDATA];
   gchar *content;
 
   if (status == STATUS_MESSAGE_FIRST) {
     status = STATUS_MESSAGE;
     g_source_remove (tag);
   }
-  MyData = GetAllIp ();
-  if (!MyData) 
-    content = "Sorry, connection problems...";
-  else
+  if (MyData) {
+    GetWanIp (MyData);
     content = build_dialog_string (MyData);
-  
-  if (GTK_IS_MESSAGE_DIALOG (dialog))
-    gtk_message_dialog_set_markup ((GtkMessageDialog *) dialog, content);
+    if (GTK_IS_MESSAGE_DIALOG (dialog))
+      gtk_message_dialog_set_markup ((GtkMessageDialog *) dialog, content);
+    FreeAllIp (MyData);
+  }
+
   return TRUE;
 }
 
@@ -146,18 +150,27 @@ static void
 show_info (GtkWidget * widget, gpointer window)
 {
   GtkWidget *dialog;
+  AllIp *MyData;
+  char *content;
+  void *transmit[2];
 
   if (status > STATUS_NO_MESSAGE)
     return;
 
+  MyData = GetLanIp ();
+  // check if NULL
+  content = build_dialog_string (MyData);
+  
   dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (window),
                                                GTK_DIALOG_DESTROY_WITH_PARENT,
                                                GTK_MESSAGE_INFO,
                                                GTK_BUTTONS_CLOSE,
-                                               "<i>Please wait...</i>");
+                                               content);
   gtk_window_set_title (GTK_WINDOW (dialog), "Your ip addresses");
+  transmit[_DIALOG] = (void *)dialog;
+  transmit[_MYDATA] = (void *)MyData;
 
-  tag = g_timeout_add_seconds (1, set_dialog_content, dialog);
+  tag = g_timeout_add_seconds (1, set_dialog_content, transmit);
   status = STATUS_MESSAGE_FIRST;
 
   gtk_dialog_run (GTK_DIALOG (dialog));

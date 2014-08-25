@@ -1,0 +1,8 @@
+gdk-pixbuf-csource --stream --extern name=my_pixbuf_ok _internet_ok.png >inet_pix_ok.c
+
+UBUNTU
+sudo apt-add-repository ppa:gurqn/systray-trusty
+sudo apt-get update
+sudo apt-get upgrade
+
+

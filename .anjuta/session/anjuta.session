@@ -1,0 +1,29 @@
+[Anjuta]
+Maximized=1
+Geometry=1280x734+0+27
+
+[File Loader]
+Files=../../src/main.c#1%%%../../src/socket.h#32%%%../../src/socket.c#241%%%../../src/pixbufs.c#1%%%../../src/findtask.c#1%%%../../src/findtask.h#1
+
+[Document Manager]
+bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
+
+[Execution]
+Program uri=../../src/internet_icon
+Run in terminal=2
+Working directories=../../../internet-icon
+
+[Project Manager]
+Shortcut=internet-icon//src//internet_icon
+Expand=internet-icon%%%internet-icon//src%%%internet-icon//src//internet_icon
+
+[Build]
+Configuration list=1:Default:%%%1:Debug:Debug%%%1:Profiling:Profiling%%%1:Optimized:Optimized%%%1:MinGW32:MinGW32
+Selected Configuration=Default
+BuildArgs/Default=--enable-maintainer-mode
+BuildArgs/Debug=--enable-maintainer-mode 'CFLAGS=-g -O0' 'CXXFLAGS=-g -O0' 'JFLAGS=-g -O0' 'FFLAGS=-g -O0'
+BuildArgs/Profiling=--enable-maintainer-mode 'CFLAGS=-g -pg' 'CXXFLAGS=-g -pg' 'JFLAGS=-g -pg' 'FFLAGS=-g -pg'
+BuildArgs/Optimized=--enable-maintainer-mode 'CFLAGS=-O2' 'CXXFLAGS=-O2' 'JFLAGS=-O2' 'FFLAGS=-O2'
+
+[Debugger]
+Stop at beginning=2

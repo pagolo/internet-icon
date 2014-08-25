@@ -119,7 +119,7 @@ set_dialog_content (gpointer data)
   }
   MyData = GetAllIp ();
   if (!MyData)
-    return FALSE;
+    return TRUE;
   for (il = MyData->LanIpList; il; il = il->Next)
     ++count;
   array = calloc (count, sizeof (gchar *));

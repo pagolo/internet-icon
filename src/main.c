@@ -103,23 +103,12 @@ enum
 static guint status = STATUS_NO_MESSAGE;
 static guint tag = 0;
 
-static gboolean
-set_dialog_content (gpointer data)
+static gchar *build_dialog_string (AllIp *MyData)
 {
-  GtkWidget *dialog = (GtkWidget *) data;
-  AllIp *MyData;
   IpList *il;
   gchar **array;
   gint count = 2;
-  gchar *content;
 
-  if (status == STATUS_MESSAGE_FIRST) {
-    status = STATUS_MESSAGE;
-    g_source_remove (tag);
-  }
-  MyData = GetAllIp ();
-  if (!MyData)
-    return TRUE;
   for (il = MyData->LanIpList; il; il = il->Next)
     ++count;
   array = calloc (count, sizeof (gchar *));
@@ -127,7 +116,27 @@ set_dialog_content (gpointer data)
   array[0] = strdup (MyData->WanIp);
   for (il = MyData->LanIpList; il; il = il->Next)
     array[++count] = strdup (il->IpString);
-  content = g_strjoinv ("\n", array);
+  return g_strjoinv ("\n", array);
+}
+                                  
+static gboolean
+set_dialog_content (gpointer data)
+{
+  GtkWidget *dialog = (GtkWidget *) data;
+  AllIp *MyData;
+  gint socket = -1;
+  gchar *content;
+
+  if (status == STATUS_MESSAGE_FIRST) {
+    status = STATUS_MESSAGE;
+    g_source_remove (tag);
+  }
+  MyData = GetAllIp ();
+  if (!MyData) 
+    content = "Sorry, connection problems...";
+  else
+    content = build_dialog_string (MyData);
+  
   if (GTK_IS_MESSAGE_DIALOG (dialog))
     gtk_message_dialog_set_markup ((GtkMessageDialog *) dialog, content);
   return TRUE;

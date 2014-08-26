@@ -3,7 +3,7 @@ Maximized=1
 Geometry=1280x734+0+27
 
 [File Loader]
-Files=../../src/main.c#138%%%../../src/socket.h#28%%%../../src/socket.c#148%%%../../src/pixbufs.c#1%%%../../src/findtask.c#1%%%../../src/findtask.h#1
+Files=../../src/main.c#141%%%../../src/socket.h#28%%%../../src/socket.c#17%%%../../src/pixbufs.c#1%%%../../src/findtask.c#1%%%../../src/findtask.h#12
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
@@ -24,6 +24,7 @@ BuildArgs/Default=--enable-maintainer-mode
 BuildArgs/Debug=--enable-maintainer-mode 'CFLAGS=-g -O0' 'CXXFLAGS=-g -O0' 'JFLAGS=-g -O0' 'FFLAGS=-g -O0'
 BuildArgs/Profiling=--enable-maintainer-mode 'CFLAGS=-g -pg' 'CXXFLAGS=-g -pg' 'JFLAGS=-g -pg' 'FFLAGS=-g -pg'
 BuildArgs/Optimized=--enable-maintainer-mode 'CFLAGS=-O2' 'CXXFLAGS=-O2' 'JFLAGS=-O2' 'FFLAGS=-O2'
+BuildArgs/MinGW32=
 
 [Debugger]
 Stop at beginning=2

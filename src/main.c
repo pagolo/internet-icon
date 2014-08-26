@@ -12,11 +12,20 @@
 #include "socket.h"
 #include "findtask.h"
 
-static void
-tray_icon_on_click (GtkStatusIcon * status_icon, gpointer user_data)
+enum
 {
-  printf ("Clicked on tray icon\n");
-}
+  STATUS_NO_MESSAGE,
+  STATUS_MESSAGE_FIRST,
+  STATUS_MESSAGE
+};
+
+enum {
+  _DIALOG, _MYDATA
+};
+
+static guint status = STATUS_NO_MESSAGE;
+static guint tag = 0;
+int delay = 15;
 
 static void
 tray_icon_on_menu (GtkStatusIcon * status_icon, guint button,
@@ -93,16 +102,6 @@ tray_about (GtkMenuItem * item, gpointer window)
   gtk_widget_destroy (dialog);
 }
 
-enum
-{
-  STATUS_NO_MESSAGE,
-  STATUS_MESSAGE_FIRST,
-  STATUS_MESSAGE
-};
-
-static guint status = STATUS_NO_MESSAGE;
-static guint tag = 0;
-
 static gchar *build_dialog_string (AllIp *MyData)
 {
   IpList *il;
@@ -119,10 +118,6 @@ static gchar *build_dialog_string (AllIp *MyData)
   return g_strjoinv ("\n", array);
 }
                                   
-enum {
-  _DIALOG, _MYDATA
-};
-
 static gboolean
 set_dialog_content (gpointer data)
 {
@@ -135,11 +130,16 @@ set_dialog_content (gpointer data)
     status = STATUS_MESSAGE;
     g_source_remove (tag);
   }
+  
   if (MyData) {
     GetWanIp (MyData);
     content = build_dialog_string (MyData);
-    if (GTK_IS_MESSAGE_DIALOG (dialog))
-      gtk_message_dialog_set_markup ((GtkMessageDialog *) dialog, content);
+    if (GTK_IS_MESSAGE_DIALOG (dialog)) {
+      gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG(dialog), content);
+      GtkWidget *button = gtk_dialog_add_button (GTK_DIALOG(dialog), "Close", 1234);
+      g_signal_connect_swapped (button, "activate", G_CALLBACK(gtk_widget_destroy), dialog);
+      gtk_widget_grab_focus (GTK_WIDGET (button));
+    }
     FreeAllIp (MyData);
   }
 
@@ -164,13 +164,18 @@ show_info (GtkWidget * widget, gpointer window)
   dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (window),
                                                GTK_DIALOG_DESTROY_WITH_PARENT,
                                                GTK_MESSAGE_INFO,
-                                               GTK_BUTTONS_CLOSE,
+                                               GTK_BUTTONS_NONE,
                                                content);
   gtk_window_set_title (GTK_WINDOW (dialog), "Your ip addresses");
   transmit[_DIALOG] = (void *)dialog;
   transmit[_MYDATA] = (void *)MyData;
 
-  tag = g_timeout_add_seconds (1, set_dialog_content, transmit);
+  tag = g_timeout_add (100, set_dialog_content, transmit);
+  /*
+  g_signal_connect_after (G_OBJECT (dialog), "show",
+                    G_CALLBACK (set_dialog_content), MyData);
+  */
+  
   status = STATUS_MESSAGE_FIRST;
 
   gtk_dialog_run (GTK_DIALOG (dialog));
@@ -188,8 +193,6 @@ create_tray_icon (GtkWidget * menu)
     fprintf (stderr, "Can't create status icon");
     exit (5);
   }
-  g_signal_connect (G_OBJECT (tray_icon), "activate",
-                    G_CALLBACK (tray_icon_on_click), NULL);
   if (menu)
     g_signal_connect (G_OBJECT (tray_icon),
                       "popup-menu", G_CALLBACK (tray_icon_on_menu), menu);
@@ -235,7 +238,7 @@ main (int argc, char *argv[])
 
   tray_icon = create_tray_icon (create_menu ());
 
-  g_timeout_add_seconds (5, _internet_update, tray_icon);
+  g_timeout_add_seconds (delay, _internet_update, tray_icon);
 
   gtk_main ();
 

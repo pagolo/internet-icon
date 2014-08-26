@@ -182,13 +182,9 @@ GetLanIp (void)
 AllIp *
 GetWanIp (AllIp *MyData)
 {
-  long arg;
-  fd_set myset;
-  struct timeval tv;
-  socklen_t lon;
   struct hostent *Host = { 0 };
   struct sockaddr_in INetSocketAddr = { 0 };
-  int res, i, valopt;
+  int res, i;
   const char request[] =
     "GET /ip\r\nHTTP/1.0\r\nUser-Agent: InternetIcon/0.1\r\n\r\n";
 
@@ -208,25 +204,8 @@ GetWanIp (AllIp *MyData)
     return MyData;
   }
 
-    // Set non-blocking 
-  arg = fcntl (soc, F_GETFL, NULL);
-  if (arg < 0) {
-    fprintf (stderr, "Error fcntl(..., F_GETFL) (%s)\n", strerror (errno));
-    close(soc);
-    MyData->WanIp = strdup("<i>Socket error.</i>");
-    return MyData;
-  }
-  if (fcntl (soc, F_SETFL, arg|O_NONBLOCK) < 0) {
-    fprintf (stderr, "Error fcntl(..., F_SETFL) (%s)\n", strerror (errno));
-    close(soc);
-    MyData->WanIp = strdup("<i>Socket error.</i>");
-    return MyData;
-  }
-
   // Trying to connect
   res = -1;
-  MyData->WanIp = strdup("Can't retrive wan ip.");
-  
   for (i = 0; Host->h_addr_list[i]; i++) {
     memcpy ((char *) &INetSocketAddr.sin_addr, Host->h_addr_list[i],
             Host->h_length);
@@ -235,48 +214,16 @@ GetWanIp (AllIp *MyData)
     res =
       connect (soc, (struct sockaddr *) &INetSocketAddr,
                sizeof (INetSocketAddr));
-    if (res < 0) {
-      if (errno == EINPROGRESS) {
-        tv.tv_sec = 6;
-        tv.tv_usec = 0;
-        FD_ZERO (&myset);
-        FD_SET (soc, &myset);
-        if (select (soc + 1, NULL, &myset, NULL, &tv) > 0) {
-          lon = sizeof (int);
-          getsockopt (soc, SOL_SOCKET, SO_ERROR, (void *) (&valopt), &lon);
-          if (valopt) {
-            fprintf (stderr, "Error in connection() %d - %s\n", valopt,
-                     strerror (valopt));
-            close (soc);
-            return (MyData);
-          }
-          // no error... exit loop...
-          break;
-        }
-        else {
-          // SOLARIS: ioctl(connection, I_SETSIG, S_HANGUP);
-          shutdown(soc, SHUT_RDWR);
-          continue;
-        }
-      }
-      else {
-        fprintf (stderr, "Error connecting %d - %s\n", errno, strerror (errno));
-        close (soc);
-        return (MyData);
-      }
+    if (res == 0) {
+      break;
     }
   }
-  /* old routine
   if (res < 0) {
     fprintf (stderr, "Can't connect to site\n");
     close (soc);
     MyData->WanIp = strdup("Can't retrive wan ip.");
     return MyData;
   }
-  */
-
-  fcntl (soc, F_SETFL, arg);
-  // check if success
 
   if (write (soc, request, strlen (request)) < 1) {
     fprintf (stderr, "request ip failed\n");

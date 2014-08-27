@@ -9,5 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <libgen.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 int find_task (char *inputName);

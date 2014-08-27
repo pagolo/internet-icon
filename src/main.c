@@ -24,8 +24,8 @@ enum {
 };
 
 static guint status = STATUS_NO_MESSAGE;
-static guint tag = 0;
-int delay = 15;
+
+int delay = 10;
 
 static void
 tray_icon_on_menu (GtkStatusIcon * status_icon, guint button,
@@ -39,7 +39,7 @@ tray_icon_on_menu (GtkStatusIcon * status_icon, guint button,
 static gboolean
 check_internet (void)
 {
-  int rc = TestConnection ("8.8.8.8", 53);
+  int rc = test_connection ("8.8.8.8", 53);
   printf ("success = %d\n", rc);
   return (gboolean) rc;
 }
@@ -105,8 +105,8 @@ tray_about (GtkMenuItem * item, gpointer window)
 static gchar *build_dialog_string (AllIp *MyData)
 {
   IpList *il;
-  gchar **array;
-  gint count = 2;
+  gchar **array, *result;
+  gint count = 2, i;
 
   for (il = MyData->LanIpList; il; il = il->Next)
     ++count;
@@ -115,7 +115,11 @@ static gchar *build_dialog_string (AllIp *MyData)
   array[0] = strdup (MyData->WanIp);
   for (il = MyData->LanIpList; il; il = il->Next)
     array[++count] = strdup (il->IpString);
-  return g_strjoinv ("\n", array);
+  result = g_strjoinv ("\n", array);
+  for (i = 0; array[i]; i++)
+    free (array[i]);
+  free (array);
+  return result;
 }
                                   
 static gboolean
@@ -128,22 +132,25 @@ set_dialog_content (gpointer data)
 
   if (status == STATUS_MESSAGE_FIRST) {
     status = STATUS_MESSAGE;
-    g_source_remove (tag);
+    //g_source_remove (tag);
   }
   
   if (MyData) {
-    GetWanIp (MyData);
+    get_wan_ip (MyData);
     content = build_dialog_string (MyData);
-    if (GTK_IS_MESSAGE_DIALOG (dialog)) {
+    if (GTK_IS_MESSAGE_DIALOG (dialog) && content) {
       gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG(dialog), content);
       GtkWidget *button = gtk_dialog_add_button (GTK_DIALOG(dialog), "Close", 1234);
-      g_signal_connect_swapped (button, "activate", G_CALLBACK(gtk_widget_destroy), dialog);
-      gtk_widget_grab_focus (GTK_WIDGET (button));
+      if (button) {
+        g_signal_connect_swapped (button, "activate", G_CALLBACK(gtk_widget_destroy), dialog);
+        gtk_widget_grab_focus (GTK_WIDGET (button));
+      }
     }
-    FreeAllIp (MyData);
+    if (content) free(content);
+    free_all_ip (MyData);
   }
-
-  return TRUE;
+  // returns stopping timeout
+  return FALSE;
 }
 
 static void
@@ -157,8 +164,10 @@ show_info (GtkWidget * widget, gpointer window)
   if (status > STATUS_NO_MESSAGE)
     return;
 
-  MyData = GetLanIp ();
-  // check if NULL
+  MyData = get_lan_ip ();
+  if (MyData == NULL)
+    return;
+  
   content = build_dialog_string (MyData);
   
   dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (window),
@@ -166,15 +175,17 @@ show_info (GtkWidget * widget, gpointer window)
                                                GTK_MESSAGE_INFO,
                                                GTK_BUTTONS_NONE,
                                                content);
+  if (content)
+    free(content);
+  if (dialog == NULL) {
+    free_all_ip (MyData);
+    return;
+  }
   gtk_window_set_title (GTK_WINDOW (dialog), "Your ip addresses");
   transmit[_DIALOG] = (void *)dialog;
   transmit[_MYDATA] = (void *)MyData;
 
-  tag = g_timeout_add (100, set_dialog_content, transmit);
-  /*
-  g_signal_connect_after (G_OBJECT (dialog), "show",
-                    G_CALLBACK (set_dialog_content), MyData);
-  */
+  g_timeout_add (200, set_dialog_content, transmit);
   
   status = STATUS_MESSAGE_FIRST;
 
@@ -230,7 +241,7 @@ main (int argc, char *argv[])
   GtkStatusIcon *tray_icon;
 
   if (find_task (argv[0])) {
-    printf ("Il programma è già attivo per questo utente\n");
+    printf ("Program is already active for this user.\n");
     return (5);
   }
 

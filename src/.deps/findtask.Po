@@ -20,7 +20,9 @@ findtask.o: findtask.c /usr/include/stdc-predef.h findtask.h \
  /usr/include/wchar.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/stdarg.h \
  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
- /usr/include/bits/stdio.h /usr/include/libgen.h
+ /usr/include/bits/stdio.h /usr/include/libgen.h /usr/include/unistd.h \
+ /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
+ /usr/include/bits/confname.h /usr/include/getopt.h
 
 /usr/include/stdc-predef.h:
 
@@ -113,3 +115,13 @@ findtask.h:
 /usr/include/bits/stdio.h:
 
 /usr/include/libgen.h:
+
+/usr/include/unistd.h:
+
+/usr/include/bits/posix_opt.h:
+
+/usr/include/bits/environments.h:
+
+/usr/include/bits/confname.h:
+
+/usr/include/getopt.h:

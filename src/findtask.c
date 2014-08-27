@@ -52,7 +52,7 @@ find_task (char *inputName)
             }
             if (getline (&uidBuffer, &uidSize, uid) > 0) {
               if (atoi (uidBuffer) == geteuid ()) {
-                printf ("Processo %s, userid %s\n", taskName, uidBuffer);
+                printf ("Process %s, userid %s\n", taskName, uidBuffer);
                 ++found;
               }
             }

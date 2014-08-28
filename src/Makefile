@@ -93,7 +93,7 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_internet_icon_OBJECTS = main.$(OBJEXT) socket.$(OBJEXT) \
-	findtask.$(OBJEXT) pixbufs.$(OBJEXT)
+	findtask.$(OBJEXT) pixbufs.$(OBJEXT) xml.$(OBJEXT)
 internet_icon_OBJECTS = $(am_internet_icon_OBJECTS)
 am__DEPENDENCIES_1 =
 internet_icon_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -204,8 +204,8 @@ INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
 INSTOBJEXT = .mo
-INTERNET_ICON_CFLAGS = -pthread -I/usr/include/gtk-3.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/gtk-3.0 -I/usr/include/gio-unix-2.0/ -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/harfbuzz -I/usr/include/pango-1.0 -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libdrm -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libpng16 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include 
-INTERNET_ICON_LIBS = -lgtk-3 -lgdk-3 -lpangocairo-1.0 -lpango-1.0 -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 
+INTERNET_ICON_CFLAGS = -pthread -I/usr/include/libxml2 -I/usr/include/gtk-3.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/gtk-3.0 -I/usr/include/gio-unix-2.0/ -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/harfbuzz -I/usr/include/pango-1.0 -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libdrm -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libpng16 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include 
+INTERNET_ICON_LIBS = -lxml2 -lgtk-3 -lgdk-3 -lpangocairo-1.0 -lpango-1.0 -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 
 INTLLIBS = 
 INTLTOOL_EXTRACT = /usr/bin/intltool-extract
 INTLTOOL_MERGE = /usr/bin/intltool-merge
@@ -330,7 +330,11 @@ internet_icon_SOURCES = \
 	socket.h \
 	findtask.c \
 	findtask.h \
-	pixbufs.c
+	pixbufs.c \
+	xml.c \
+	xml.h \
+	main.h \
+	mylocale.h
 
 internet_icon_LDFLAGS = \
 	-Wl,--export-dynamic
@@ -435,6 +439,7 @@ include ./$(DEPDIR)/findtask.Po
 include ./$(DEPDIR)/main.Po
 include ./$(DEPDIR)/pixbufs.Po
 include ./$(DEPDIR)/socket.Po
+include ./$(DEPDIR)/xml.Po
 
 .c.o:
 	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

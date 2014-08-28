@@ -11,21 +11,18 @@
 #include <unistd.h>
 #include "socket.h"
 #include "findtask.h"
+#include "xml.h"
+#include "main.h"
 
-enum
-{
-  STATUS_NO_MESSAGE,
-  STATUS_MESSAGE_FIRST,
-  STATUS_MESSAGE
-};
-
-enum {
-  _DIALOG, _MYDATA
-};
-
+// status for ip dialog
 static guint status = STATUS_NO_MESSAGE;
 
-int delay = 10;
+// allocate config and set defaults
+Config cfg = { 15, "8.8.8.8", 53, "ifconfig.me/ip"};
+
+// internet icons
+extern const GdkPixdata my_pixbuf_ok;
+extern const GdkPixdata my_pixbuf_ko;
 
 static void
 tray_icon_on_menu (GtkStatusIcon * status_icon, guint button,
@@ -39,13 +36,10 @@ tray_icon_on_menu (GtkStatusIcon * status_icon, guint button,
 static gboolean
 check_internet (void)
 {
-  int rc = test_connection ("8.8.8.8", 53);
+  int rc = test_connection (cfg.test_ip, cfg.test_port);
   printf ("success = %d\n", rc);
   return (gboolean) rc;
 }
-
-extern const GdkPixdata my_pixbuf_ok;
-extern const GdkPixdata my_pixbuf_ko;
 
 static gboolean
 _internet_update (gpointer data)
@@ -245,11 +239,13 @@ main (int argc, char *argv[])
     return (5);
   }
 
+  parse_config();
+
   gtk_init (&argc, &argv);
 
   tray_icon = create_tray_icon (create_menu ());
 
-  g_timeout_add_seconds (delay, _internet_update, tray_icon);
+  g_timeout_add_seconds (cfg.timeout_seconds, _internet_update, tray_icon);
 
   gtk_main ();
 

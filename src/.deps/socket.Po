@@ -39,7 +39,8 @@ socket.o: socket.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/fcntl.h /usr/include/bits/fcntl-linux.h \
  /usr/include/unistd.h /usr/include/bits/posix_opt.h \
  /usr/include/bits/environments.h /usr/include/bits/confname.h \
- /usr/include/getopt.h /usr/include/net/if.h /usr/include/arpa/inet.h
+ /usr/include/getopt.h /usr/include/net/if.h /usr/include/arpa/inet.h \
+ main.h
 
 /usr/include/stdc-predef.h:
 
@@ -210,3 +211,5 @@ socket.h:
 /usr/include/net/if.h:
 
 /usr/include/arpa/inet.h:
+
+main.h:

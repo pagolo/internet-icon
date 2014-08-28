@@ -1,27 +1,10 @@
 #include <stdio.h>
 #include <errno.h>
+#include "utils.h"
 #include "socket.h"
+#include "main.h"
 
-extern int delay;
-
-char *
-mysprintf (const char *format, ...)
-{
-  char *buf = calloc (1, 6);
-  int buflen;
-  va_list argptr;
-
-  va_start (argptr, format);
-  buflen = vsnprintf (buf, 4, format, argptr);
-  free (buf);
-  va_end (argptr);
-  
-  va_start (argptr, format);
-  buf = calloc (1, ++buflen);
-  vsnprintf (buf, buflen, format, argptr);
-  va_end (argptr);
-    return buf;
-}
+extern Config cfg;
 
 SOCKET
 create_socket(long *arg, SOCKET old)
@@ -73,7 +56,7 @@ test_connection (const char *ip, int port)
 
   if (res < 0) {
     if (errno == EINPROGRESS) {
-      tv.tv_sec = delay - 1;
+      tv.tv_sec = cfg.timeout_seconds - 1;
       tv.tv_usec = 0;
       FD_ZERO (&myset);
       FD_SET (soc, &myset);

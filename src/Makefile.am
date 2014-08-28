@@ -25,7 +25,13 @@ internet_icon_SOURCES =  \
 	socket.h \
 	findtask.c \
 	findtask.h \
-	pixbufs.c
+	pixbufs.c \
+	xml.c \
+	xml.h \
+	main.h \
+	mylocale.h \
+	utils.c \
+	utils.h
 
 internet_icon_LDFLAGS = \
 	-Wl,--export-dynamic

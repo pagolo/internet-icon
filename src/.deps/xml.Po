@@ -1,4 +1,4 @@
-main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
+xml.o: xml.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/features.h /usr/include/sys/cdefs.h \
  /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
  /usr/include/gnu/stubs-64.h \
@@ -7,10 +7,14 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/stdarg.h \
  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
- /usr/include/bits/stdio.h ../config.h /usr/include/gtk-3.0/gtk/gtk.h \
- /usr/include/gtk-3.0/gdk/gdk.h /usr/include/gtk-3.0/gdk/gdkconfig.h \
- /usr/include/glib-2.0/glib.h /usr/include/glib-2.0/glib/galloca.h \
- /usr/include/glib-2.0/glib/gtypes.h \
+ /usr/include/bits/stdio.h /usr/include/sys/stat.h /usr/include/time.h \
+ /usr/include/bits/stat.h /usr/include/unistd.h \
+ /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
+ /usr/include/bits/confname.h /usr/include/getopt.h /usr/include/fcntl.h \
+ /usr/include/bits/fcntl.h /usr/include/bits/fcntl-linux.h \
+ /usr/include/gtk-3.0/gtk/gtk.h /usr/include/gtk-3.0/gdk/gdk.h \
+ /usr/include/gtk-3.0/gdk/gdkconfig.h /usr/include/glib-2.0/glib.h \
+ /usr/include/glib-2.0/glib/galloca.h /usr/include/glib-2.0/glib/gtypes.h \
  /usr/lib64/glib-2.0/include/glibconfig.h \
  /usr/include/glib-2.0/glib/gmacros.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/limits.h \
@@ -19,9 +23,8 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
  /usr/include/bits/posix2_lim.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/float.h \
- /usr/include/glib-2.0/glib/gversionmacros.h /usr/include/time.h \
- /usr/include/bits/time.h /usr/include/xlocale.h \
- /usr/include/glib-2.0/glib/garray.h \
+ /usr/include/glib-2.0/glib/gversionmacros.h /usr/include/bits/time.h \
+ /usr/include/xlocale.h /usr/include/glib-2.0/glib/garray.h \
  /usr/include/glib-2.0/glib/gasyncqueue.h \
  /usr/include/glib-2.0/glib/gthread.h \
  /usr/include/glib-2.0/glib/gatomic.h /usr/include/glib-2.0/glib/gerror.h \
@@ -132,11 +135,9 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/glib-2.0/gio/gcontenttype.h \
  /usr/include/glib-2.0/gio/gconverterinputstream.h \
  /usr/include/glib-2.0/gio/gconverteroutputstream.h \
- /usr/include/glib-2.0/gio/gcredentials.h /usr/include/unistd.h \
- /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
- /usr/include/bits/confname.h /usr/include/getopt.h \
- /usr/include/sys/types.h /usr/include/sys/select.h \
- /usr/include/bits/select.h /usr/include/sys/sysmacros.h \
+ /usr/include/glib-2.0/gio/gcredentials.h /usr/include/sys/types.h \
+ /usr/include/sys/select.h /usr/include/bits/select.h \
+ /usr/include/sys/sysmacros.h \
  /usr/include/glib-2.0/gio/gdatainputstream.h \
  /usr/include/glib-2.0/gio/gdataoutputstream.h \
  /usr/include/glib-2.0/gio/gdbusaddress.h \
@@ -551,30 +552,29 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvscale.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvscrollbar.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvseparator.h \
- /usr/include/gdk-pixbuf-2.0/gdk-pixbuf/gdk-pixdata.h socket.h \
+ /usr/include/libxml2/libxml/xmlmemory.h \
+ /usr/include/libxml2/libxml/xmlversion.h \
+ /usr/include/libxml2/libxml/xmlexports.h \
+ /usr/include/libxml2/libxml/threads.h \
+ /usr/include/libxml2/libxml/globals.h \
+ /usr/include/libxml2/libxml/parser.h /usr/include/libxml2/libxml/tree.h \
+ /usr/include/libxml2/libxml/xmlstring.h \
+ /usr/include/libxml2/libxml/xmlregexp.h \
+ /usr/include/libxml2/libxml/dict.h /usr/include/libxml2/libxml/hash.h \
+ /usr/include/libxml2/libxml/valid.h \
+ /usr/include/libxml2/libxml/xmlerror.h \
+ /usr/include/libxml2/libxml/list.h \
+ /usr/include/libxml2/libxml/xmlautomata.h \
+ /usr/include/libxml2/libxml/entities.h \
+ /usr/include/libxml2/libxml/encoding.h /usr/include/iconv.h \
+ /usr/include/libxml2/libxml/xmlIO.h /usr/include/libxml2/libxml/SAX.h \
  /usr/include/stdlib.h /usr/include/bits/waitflags.h \
  /usr/include/bits/waitstatus.h /usr/include/alloca.h \
  /usr/include/bits/stdlib-bsearch.h /usr/include/bits/stdlib-float.h \
- /usr/include/string.h /usr/include/bits/string.h \
- /usr/include/bits/string2.h /usr/include/netdb.h \
- /usr/include/netinet/in.h \
- /usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/stdint.h \
- /usr/include/stdint.h /usr/include/bits/wchar.h \
- /usr/include/sys/socket.h /usr/include/sys/uio.h /usr/include/bits/uio.h \
- /usr/include/bits/socket.h /usr/include/bits/socket_type.h \
- /usr/include/bits/sockaddr.h /usr/include/asm/socket.h \
- /usr/include/asm-generic/socket.h /usr/include/asm/sockios.h \
- /usr/include/asm-generic/sockios.h /usr/include/bits/in.h \
- /usr/include/rpc/netdb.h /usr/include/bits/netdb.h \
- /usr/include/sys/stat.h /usr/include/bits/stat.h \
- /usr/include/sys/ioctl.h /usr/include/bits/ioctls.h \
- /usr/include/asm/ioctls.h /usr/include/asm-generic/ioctls.h \
- /usr/include/linux/ioctl.h /usr/include/asm/ioctl.h \
- /usr/include/asm-generic/ioctl.h /usr/include/bits/ioctl-types.h \
- /usr/include/sys/ttydefaults.h /usr/include/fcntl.h \
- /usr/include/bits/fcntl.h /usr/include/bits/fcntl-linux.h \
- /usr/include/net/if.h /usr/include/arpa/inet.h findtask.h \
- /usr/include/libgen.h xml.h main.h
+ /usr/include/libxml2/libxml/xlink.h /usr/include/libxml2/libxml/SAX2.h \
+ /usr/include/libxml2/libxml/xmlwriter.h /usr/include/locale.h \
+ /usr/include/bits/locale.h /usr/include/libintl.h mylocale.h xml.h \
+ main.h
 
 /usr/include/stdc-predef.h:
 
@@ -610,7 +610,27 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 
 /usr/include/bits/stdio.h:
 
-../config.h:
+/usr/include/sys/stat.h:
+
+/usr/include/time.h:
+
+/usr/include/bits/stat.h:
+
+/usr/include/unistd.h:
+
+/usr/include/bits/posix_opt.h:
+
+/usr/include/bits/environments.h:
+
+/usr/include/bits/confname.h:
+
+/usr/include/getopt.h:
+
+/usr/include/fcntl.h:
+
+/usr/include/bits/fcntl.h:
+
+/usr/include/bits/fcntl-linux.h:
 
 /usr/include/gtk-3.0/gtk/gtk.h:
 
@@ -645,8 +665,6 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 /usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/float.h:
 
 /usr/include/glib-2.0/glib/gversionmacros.h:
-
-/usr/include/time.h:
 
 /usr/include/bits/time.h:
 
@@ -925,16 +943,6 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 /usr/include/glib-2.0/gio/gconverteroutputstream.h:
 
 /usr/include/glib-2.0/gio/gcredentials.h:
-
-/usr/include/unistd.h:
-
-/usr/include/bits/posix_opt.h:
-
-/usr/include/bits/environments.h:
-
-/usr/include/bits/confname.h:
-
-/usr/include/getopt.h:
 
 /usr/include/sys/types.h:
 
@@ -1814,9 +1822,45 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 
 /usr/include/gtk-3.0/gtk/deprecated/gtkvseparator.h:
 
-/usr/include/gdk-pixbuf-2.0/gdk-pixbuf/gdk-pixdata.h:
+/usr/include/libxml2/libxml/xmlmemory.h:
 
-socket.h:
+/usr/include/libxml2/libxml/xmlversion.h:
+
+/usr/include/libxml2/libxml/xmlexports.h:
+
+/usr/include/libxml2/libxml/threads.h:
+
+/usr/include/libxml2/libxml/globals.h:
+
+/usr/include/libxml2/libxml/parser.h:
+
+/usr/include/libxml2/libxml/tree.h:
+
+/usr/include/libxml2/libxml/xmlstring.h:
+
+/usr/include/libxml2/libxml/xmlregexp.h:
+
+/usr/include/libxml2/libxml/dict.h:
+
+/usr/include/libxml2/libxml/hash.h:
+
+/usr/include/libxml2/libxml/valid.h:
+
+/usr/include/libxml2/libxml/xmlerror.h:
+
+/usr/include/libxml2/libxml/list.h:
+
+/usr/include/libxml2/libxml/xmlautomata.h:
+
+/usr/include/libxml2/libxml/entities.h:
+
+/usr/include/libxml2/libxml/encoding.h:
+
+/usr/include/iconv.h:
+
+/usr/include/libxml2/libxml/xmlIO.h:
+
+/usr/include/libxml2/libxml/SAX.h:
 
 /usr/include/stdlib.h:
 
@@ -1830,83 +1874,19 @@ socket.h:
 
 /usr/include/bits/stdlib-float.h:
 
-/usr/include/string.h:
+/usr/include/libxml2/libxml/xlink.h:
 
-/usr/include/bits/string.h:
+/usr/include/libxml2/libxml/SAX2.h:
 
-/usr/include/bits/string2.h:
+/usr/include/libxml2/libxml/xmlwriter.h:
 
-/usr/include/netdb.h:
+/usr/include/locale.h:
 
-/usr/include/netinet/in.h:
+/usr/include/bits/locale.h:
 
-/usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/stdint.h:
+/usr/include/libintl.h:
 
-/usr/include/stdint.h:
-
-/usr/include/bits/wchar.h:
-
-/usr/include/sys/socket.h:
-
-/usr/include/sys/uio.h:
-
-/usr/include/bits/uio.h:
-
-/usr/include/bits/socket.h:
-
-/usr/include/bits/socket_type.h:
-
-/usr/include/bits/sockaddr.h:
-
-/usr/include/asm/socket.h:
-
-/usr/include/asm-generic/socket.h:
-
-/usr/include/asm/sockios.h:
-
-/usr/include/asm-generic/sockios.h:
-
-/usr/include/bits/in.h:
-
-/usr/include/rpc/netdb.h:
-
-/usr/include/bits/netdb.h:
-
-/usr/include/sys/stat.h:
-
-/usr/include/bits/stat.h:
-
-/usr/include/sys/ioctl.h:
-
-/usr/include/bits/ioctls.h:
-
-/usr/include/asm/ioctls.h:
-
-/usr/include/asm-generic/ioctls.h:
-
-/usr/include/linux/ioctl.h:
-
-/usr/include/asm/ioctl.h:
-
-/usr/include/asm-generic/ioctl.h:
-
-/usr/include/bits/ioctl-types.h:
-
-/usr/include/sys/ttydefaults.h:
-
-/usr/include/fcntl.h:
-
-/usr/include/bits/fcntl.h:
-
-/usr/include/bits/fcntl-linux.h:
-
-/usr/include/net/if.h:
-
-/usr/include/arpa/inet.h:
-
-findtask.h:
-
-/usr/include/libgen.h:
+mylocale.h:
 
 xml.h:
 

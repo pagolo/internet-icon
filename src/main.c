@@ -45,7 +45,6 @@ check_internet (void)
 static void
 tray_exit (GtkMenuItem * item, gpointer user_data)
 {
-  //printf("exit");
   gtk_main_quit ();
 }
 
@@ -192,6 +191,8 @@ create_menu ()
   menuItemIP = gtk_menu_item_new_with_label ("Your IP");
   menuItemAbout = gtk_menu_item_new_with_label ("About");
   menuItemExit = gtk_menu_item_new_with_label ("Exit");
+  if (!menuItemIP || !menuItemAbout || !menuItemExit)
+    return NULL;
   g_signal_connect (G_OBJECT (menuItemIP), "activate", G_CALLBACK (show_info),
                     NULL);
   g_signal_connect (G_OBJECT (menuItemAbout), "activate",
@@ -215,6 +216,8 @@ internet_update (gpointer data)
 
   if (!(*tray_icon)) {
     *tray_icon = create_tray_icon (create_menu ());
+    if (!(*tray_icon))
+      return FALSE;
   }
     
   if (check_internet ()) {

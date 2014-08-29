@@ -143,7 +143,7 @@ get_lan_ip (void)
   ifc.ifc_len = sizeof (buf);
   ifc.ifc_buf = buf;
   if (ioctl (soc, SIOCGIFCONF, &ifc) < 0) {
-    perror ("ioctl(SIOCGIFCONF)");
+    fprintf (stderr, "ioctl(SIOCGIFCONF)\n");
     closesocket(soc);
     free(MyData);
     return NULL;
@@ -216,16 +216,21 @@ get_wan_ip (AllIp *MyData)
   }
   
   Host = (struct hostent *) gethostbyname (domain);
-  free(domain);
   if (Host == NULL) {
     fprintf (stderr, "Error getting host address (%d %s)\n", errno,
              strerror (errno));
-    MyData->WanIp = strdup("<i>Can't find wan ip.</i>");
+    MyData->WanIp = strdup("<i>Error getting host address.</i>");
     return MyData;
   }
+  free(domain);
 
   int soc = create_socket (&arg, -1);
-  //TODO test if <0
+  if (soc < 0) {
+    fprintf (stderr, "Error creating socket (%d %s)\n", errno,
+             strerror (errno));
+    MyData->WanIp = strdup("<i>Error creating socket.</i>");
+    return MyData;
+  }
 
   // Trying to connect
   res = -1;
@@ -253,7 +258,12 @@ get_wan_ip (AllIp *MyData)
             fprintf (stderr, "Error in connection() %d - %s\n", valopt,
                      strerror (valopt));
             soc = create_socket (&arg, soc);
-            //TODO test < 0
+            if (soc < 0) {
+              fprintf (stderr, "Error creating socket (%d %s)\n", errno,
+                       strerror (errno));
+              MyData->WanIp = strdup("<i>Error creating socket.</i>");
+              return MyData;
+            }
             continue;
           }
           // no error... exit loop...
@@ -263,7 +273,12 @@ get_wan_ip (AllIp *MyData)
           // SOLARIS: ioctl(connection, I_SETSIG, S_HANGUP);
           shutdown(soc, SHUT_RDWR);
           soc = create_socket (&arg, soc);
-          //TODO test < 0
+          if (soc < 0) {
+            fprintf (stderr, "Error creating socket (%d %s)\n", errno,
+                       strerror (errno));
+            MyData->WanIp = strdup("<i>Error creating socket.</i>");
+            return MyData;
+          }
           continue;
         }
       }
@@ -275,8 +290,12 @@ get_wan_ip (AllIp *MyData)
     }
   }
 
-  fcntl (soc, F_SETFL, arg);
-  //TODO check if success
+  if (fcntl (soc, F_SETFL, arg) < 0) {
+    fprintf (stderr, "Error setting socket flags (%d %s)\n", errno,
+             strerror (errno));
+    MyData->WanIp = strdup("<i>Error setting socket flags.</i>");
+    return MyData;
+  }
 
   request = mysprintf (request_format, page, cfg.user_agent);
   free (page);
@@ -319,4 +338,13 @@ get_wan_ip (AllIp *MyData)
 
 void free_all_ip (AllIp *MyData)
 {
+  IpList *list_item, *next_item;
+  if (!MyData) return;
+  if (MyData->WanIp) free (MyData->WanIp);
+  for (list_item = MyData->LanIpList; list_item; list_item = next_item) {
+    next_item = list_item->Next;
+    if (list_item->IpString) free (list_item->IpString);
+    free (list_item);
+  }
+  free (MyData);
 }

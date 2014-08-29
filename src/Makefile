@@ -93,7 +93,8 @@ CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_internet_icon_OBJECTS = main.$(OBJEXT) socket.$(OBJEXT) \
-	findtask.$(OBJEXT) pixbufs.$(OBJEXT) xml.$(OBJEXT)
+	findtask.$(OBJEXT) pixbufs.$(OBJEXT) xml.$(OBJEXT) \
+	utils.$(OBJEXT)
 internet_icon_OBJECTS = $(am_internet_icon_OBJECTS)
 am__DEPENDENCIES_1 =
 internet_icon_DEPENDENCIES = $(am__DEPENDENCIES_1)
@@ -334,7 +335,9 @@ internet_icon_SOURCES = \
 	xml.c \
 	xml.h \
 	main.h \
-	mylocale.h
+	mylocale.h \
+	utils.c \
+	utils.h
 
 internet_icon_LDFLAGS = \
 	-Wl,--export-dynamic
@@ -439,6 +442,7 @@ include ./$(DEPDIR)/findtask.Po
 include ./$(DEPDIR)/main.Po
 include ./$(DEPDIR)/pixbufs.Po
 include ./$(DEPDIR)/socket.Po
+include ./$(DEPDIR)/utils.Po
 include ./$(DEPDIR)/xml.Po
 
 .c.o:

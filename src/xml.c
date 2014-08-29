@@ -55,7 +55,7 @@ int write_config(void) {
   rc = xmlTextWriterWriteString(writer, BAD_CAST "\n  ");
   if (rc < 0) goto finish;
   /////////////////////////////////////
-  // the timeout
+  // timeout
   char *tm = mysprintf ("%d", cfg.timeout_seconds);
   rc = xmlTextWriterWriteElement(writer, BAD_CAST "timeout", BAD_CAST tm);
   free (tm);
@@ -63,8 +63,35 @@ int write_config(void) {
   // newline
   rc = xmlTextWriterWriteString(writer, BAD_CAST "\n  ");
   if (rc < 0) goto finish;
+  // test_ip
+  rc = xmlTextWriterWriteElement(writer, BAD_CAST "test_ip", BAD_CAST cfg.test_ip);
+  if (rc < 0) goto finish;
+  // newline
+  rc = xmlTextWriterWriteString(writer, BAD_CAST "\n  ");
+  if (rc < 0) goto finish;
+  // the port
+  char *port = mysprintf ("%d", cfg.test_port);
+  rc = xmlTextWriterWriteElement(writer, BAD_CAST "test_port", BAD_CAST port);
+  free (port);
+  if (rc < 0) goto finish;
+  // newline
+  rc = xmlTextWriterWriteString(writer, BAD_CAST "\n  ");
+  if (rc < 0) goto finish;
+  // wan ip page
+  rc = xmlTextWriterWriteElement(writer, BAD_CAST "wan_ip_page", BAD_CAST cfg.wanip_page);
+  if (rc < 0) goto finish;
+  // newline
+  rc = xmlTextWriterWriteString(writer, BAD_CAST "\n  ");
+  if (rc < 0) goto finish;
+  // wan ip page
+  rc = xmlTextWriterWriteElement(writer, BAD_CAST "user_agent", BAD_CAST cfg.user_agent);
+  if (rc < 0) goto finish;
+  // newline
+  rc = xmlTextWriterWriteString(writer, BAD_CAST "\n");
+  if (rc < 0) goto finish;
   /* Close the start element. */
   rc = xmlTextWriterEndElement(writer);
+  if (rc < 0) goto finish;
   /////////////////////////////////////
   /* Close all. */
   rc = xmlTextWriterEndDocument(writer);
@@ -77,7 +104,7 @@ int write_config(void) {
   remove(config_name);
   fd = open(config_name, O_CREAT | O_RDWR | O_TRUNC, 0600);
   if (fd < 0) goto finish;
-  write(fd, (const void *) buf->content, strlen(buf->content));
+  write(fd, (const void *) buf->content, strlen((const char *)buf->content));
   close(fd);
 #endif
 
@@ -129,12 +156,37 @@ parse_config(void) {
   while (cur != NULL) {
     if ((!xmlStrcmp(cur->name, (const xmlChar *) "timeout"))) {
       xmlChar *key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
-      if (key && *key)
-        cfg.timeout_seconds = atoi(key);
+      if (key && *key) {
+        cfg.timeout_seconds = atoi((const char *)key);
+        if (cfg.timeout_seconds < 5)
+          cfg.timeout_seconds = 5;
+      }
     }
-    if ((!xmlStrcmp(cur->name, (const xmlChar *) "user"))) {
+    if ((!xmlStrcmp(cur->name, (const xmlChar *) "test_ip"))) {
+      xmlChar *key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+      if (key && *key) {
+        cfg.test_ip = (char *)key;
+      }
     }
-    if ((!xmlStrcmp(cur->name, (const xmlChar *) "mysql"))) {
+    if ((!xmlStrcmp(cur->name, (const xmlChar *) "test_port"))) {
+      xmlChar *key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+      if (key && *key) {
+        cfg.test_port = atoi((const char *)key);
+        if (cfg.test_port < 1)
+          cfg.test_port = 80;
+      }
+    }
+    if ((!xmlStrcmp(cur->name, (const xmlChar *) "wan_ip_page"))) {
+      xmlChar *key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+      if (key && *key) {
+        cfg.wanip_page = (char *)key;
+      }
+    }
+    if ((!xmlStrcmp(cur->name, (const xmlChar *) "user_agent"))) {
+      xmlChar *key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+      if (key && *key) {
+        cfg.user_agent = (char *)key;
+      }
     }
     cur = cur->next;
   }
@@ -143,100 +195,3 @@ parse_config(void) {
   return;
 }
 
-#ifdef XYZ
-int parseMainNode(xmlDocPtr doc, xmlNodePtr cur, int action) {
-  xmlChar *key, *attrib, *message;
-  cur = cur->xmlChildrenNode;
-  INIDATA *inidata;
-
-  globaldata.gd_inidata = inidata = calloc(sizeof (INIDATA), 1);
-  if (inidata == NULL) return 0;
-  inidata->flags |= (_SKIP_MYSQL | _SKIP_CONFIGFILE);
-
-  while (cur != NULL) {
-    if ((!xmlStrcmp(cur->name, (xmlChar *) "directory"))) {
-      key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
-      attrib = xmlGetProp(cur, (xmlChar *) "create");
-      message = xmlGetProp(cur, (xmlChar *) "message");
-      inidata->directory = strdup((char *) key);
-      inidata->dir_msg = message ? strdup((char *)message) : NULL;
-      if (xmlStrcmp(attrib, (xmlChar *) "yes") == 0) {
-        inidata->flags |= _CREATEDIR;
-      }
-      xmlFree(key);
-      if (attrib) xmlFree(attrib);
-    }
-    if ((!xmlStrcmp(cur->name, (xmlChar *) "url"))) {
-      key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
-      inidata->web_archive = (char *)key;
-    }
-    if ((!xmlStrcmp(cur->name, (xmlChar *) "file"))) {
-      key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
-      attrib = xmlGetProp(cur, (xmlChar *) "unzip");
-      if (globaldata.gd_iniaddress && !inidata->web_archive)
-        inidata->web_archive = cloneaddress(globaldata.gd_iniaddress, (char *) key);
-      else if (action == UPLOAD_CONFIG) { // upload, not download
-        char *path = getenv("DOCUMENT_ROOT");
-        if (path && *path) {
-          path = append_cstring(NULL, path);
-          if (path[strlen(path) - 1] != '/') path = append_cstring(path, "/");
-          inidata->web_archive = append_cstring(path, (char *) key);
-        }
-      }
-      inidata->zip_format = setUnzip((char *) key, attrib ? (char *) attrib : "auto");
-      xmlFree(key);
-      if (attrib) xmlFree(attrib);
-    }
-    cur = cur->next;
-  }
-  return 1;
-
-}
-
-int read_xml_file(int action) {
-  xmlDocPtr doc;
-  xmlNodePtr cur, nodeptr;
-
-  doc = xmlParseFile(globaldata.gd_inifile);
-
-  if (doc == NULL) {
-    perror(_("Configuration xml document not parsed successfully. \n"));
-  }
-
-  cur = nodeptr = xmlDocGetRootElement(doc);
-
-  if (cur == NULL) {
-    xmlFreeDoc(doc);
-    perror(_("Configuration: empty document\n"));
-  }
-
-  if (xmlStrcmp(cur->name, (const xmlChar *) "ezinstaller") != 0) {
-    xmlFreeDoc(doc);
-    perror(_("Configuration: document of the wrong type, root node != ezinstaller"));
-  }
-
-  cur = cur->xmlChildrenNode;
-  while (cur != NULL) {
-    if ((!xmlStrcmp(cur->name, (const xmlChar *) "main"))) {
-      parseMainNode(doc, cur, action);
-    }
-    if ((!xmlStrcmp(cur->name, (const xmlChar *) "permissions"))) {
-      parsePermissionsNode(doc, cur);
-    }
-    if ((!xmlStrcmp(cur->name, (const xmlChar *) "config"))) {
-      parseConfigNode(doc, cur);
-    }
-    if ((!xmlStrcmp(cur->name, (const xmlChar *) "mysql"))) {
-      parseMysqlNode(doc, cur);
-    }
-    if ((!xmlStrcmp(cur->name, (const xmlChar *) "finish"))) {
-      parseFinishNode(doc, cur);
-    }
-    cur = cur->next;
-  }
-
-  return 1;
-}
-
-
-#endif

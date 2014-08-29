@@ -3,8 +3,7 @@
 
 #define MEMORY
 
-void parse_main_config(void);
-int read_xml_file(int action);
-int write_global_config(void);
+void parse_config(void);
+int write_config(void);
 
 #endif

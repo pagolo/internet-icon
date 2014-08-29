@@ -14,5 +14,6 @@ typedef struct {
   int   timeout_seconds;
   char *test_ip;
   int   test_port;
-  char *ipwan_page;
+  char *wanip_page;
+  char *user_agent;
 } Config;

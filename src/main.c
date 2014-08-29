@@ -12,13 +12,14 @@
 #include "socket.h"
 #include "findtask.h"
 #include "xml.h"
+#include "utils.h"
 #include "main.h"
 
 // status for ip dialog
 static guint status = STATUS_NO_MESSAGE;
 
 // allocate config and set defaults
-Config cfg = { 15, "8.8.8.8", 53, "ifconfig.me/ip"};
+Config cfg = { 15, "8.8.8.8", 53, "ifconfig.me/ip", "InternetIcon/0.1"};
 
 // internet icons
 extern const GdkPixdata my_pixbuf_ok;

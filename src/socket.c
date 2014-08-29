@@ -175,6 +175,21 @@ get_lan_ip (void)
   return MyData;
 }
 
+int get_domain_and_page (char **domain, char **page) {
+  char *work = strdup(cfg.wanip_page);
+  char *ptr = work, *z;
+  if (!work) return 0;
+  while (*ptr == ' ') ++ptr;
+  z = strchr (ptr, '/');
+  if (z) *z = '\0';
+  *domain = strdup(ptr);
+  if (z) *z = '/';
+  else z = "/";
+  *page = strdup(z);
+  free (work);
+  return 1;
+}
+
 AllIp *
 get_wan_ip (AllIp *MyData)
 {
@@ -185,14 +200,23 @@ get_wan_ip (AllIp *MyData)
   struct hostent *Host = { 0 };
   struct sockaddr_in INetSocketAddr = { 0 };
   int res, i, valopt;
-  const char request[] =
-    "GET /ip\r\nHTTP/1.0\r\nUser-Agent: InternetIcon/0.1\r\n\r\n";
+  char *domain, *page, *request;
+  const char request_format[] =
+    "GET %s\r\nHTTP/1.0\r\nUser-Agent: %s\r\n\r\n";
 
   // free previous string
   if (MyData->WanIp) free(MyData->WanIp);
   MyData->WanIp = NULL;
+
+  if (!(get_domain_and_page (&domain, &page))) {
+    fprintf (stderr, "Error hadling strings (%d %s)\n", errno,
+             strerror (errno));
+    MyData->WanIp = strdup("<i>Memory problems.</i>");
+    return MyData;
+  }
   
-  Host = (struct hostent *) gethostbyname ("ifconfig.me");
+  Host = (struct hostent *) gethostbyname (domain);
+  free(domain);
   if (Host == NULL) {
     fprintf (stderr, "Error getting host address (%d %s)\n", errno,
              strerror (errno));
@@ -254,6 +278,16 @@ get_wan_ip (AllIp *MyData)
   fcntl (soc, F_SETFL, arg);
   //TODO check if success
 
+  request = mysprintf (request_format, page, cfg.user_agent);
+  free (page);
+  if (request == NULL) {
+    fprintf (stderr, "Error hadling strings (%d %s)\n", errno,
+             strerror (errno));
+    close (soc);
+    MyData->WanIp = strdup ("<i>Memory problems.</i>");
+    return MyData;
+  }
+    
   if (write (soc, request, strlen (request)) < 1) {
     fprintf (stderr, "request ip failed\n");
     close (soc);

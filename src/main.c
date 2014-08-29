@@ -42,31 +42,6 @@ check_internet (void)
   return (gboolean) rc;
 }
 
-static gboolean
-_internet_update (gpointer data)
-{
-  GtkStatusIcon *tray_icon = (GtkStatusIcon *) data;
-  GdkPixdata *pdata;
-  GError *error = NULL;
-  gchar *tooltip;
-
-  if (check_internet ()) {
-    pdata = (GdkPixdata *) & my_pixbuf_ok;
-    tooltip = "Internet connection available";
-  }
-  else {
-    pdata = (GdkPixdata *) & my_pixbuf_ko;
-    tooltip = "No internet connection available";
-  }
-  gtk_status_icon_set_from_pixbuf (tray_icon,
-                                   gdk_pixbuf_from_pixdata (pdata, TRUE,
-                                                            &error));
-  gtk_status_icon_set_tooltip_text (tray_icon, tooltip);
-  gtk_status_icon_set_visible (tray_icon, TRUE);
-
-  return TRUE;
-}
-
 static void
 tray_exit (GtkMenuItem * item, gpointer user_data)
 {
@@ -202,7 +177,7 @@ create_tray_icon (GtkWidget * menu)
   if (menu)
     g_signal_connect (G_OBJECT (tray_icon),
                       "popup-menu", G_CALLBACK (tray_icon_on_menu), menu);
-  gtk_status_icon_set_visible (tray_icon, FALSE);
+  gtk_status_icon_set_visible (tray_icon, TRUE);
 
   return tray_icon;
 }
@@ -230,10 +205,38 @@ create_menu ()
   return menu;
 }
 
+static gboolean
+internet_update (gpointer data)
+{
+  GtkStatusIcon **tray_icon = (GtkStatusIcon **)data;
+  GdkPixdata *pdata;
+  GError *error = NULL;
+  gchar *tooltip;
+
+  if (!(*tray_icon)) {
+    *tray_icon = create_tray_icon (create_menu ());
+  }
+    
+  if (check_internet ()) {
+    pdata = (GdkPixdata *) & my_pixbuf_ok;
+    tooltip = "Internet connection available";
+  }
+  else {
+    pdata = (GdkPixdata *) & my_pixbuf_ko;
+    tooltip = "No internet connection available";
+  }
+  gtk_status_icon_set_from_pixbuf (*tray_icon,
+                                   gdk_pixbuf_from_pixdata (pdata, TRUE,
+                                                            &error));
+  gtk_status_icon_set_tooltip_text (*tray_icon, tooltip);
+
+  return TRUE;
+}
+
 int
 main (int argc, char *argv[])
 {
-  GtkStatusIcon *tray_icon;
+  GtkStatusIcon *tray_icon = NULL;
 
   if (find_task (argv[0])) {
     printf ("Program is already active for this user.\n");
@@ -244,9 +247,9 @@ main (int argc, char *argv[])
 
   gtk_init (&argc, &argv);
 
-  tray_icon = create_tray_icon (create_menu ());
+  //tray_icon = create_tray_icon (create_menu ());
 
-  g_timeout_add_seconds (cfg.timeout_seconds, _internet_update, tray_icon);
+  g_timeout_add_seconds (cfg.timeout_seconds, internet_update, &tray_icon);
 
   gtk_main ();
 

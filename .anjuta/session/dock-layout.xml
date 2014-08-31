@@ -4,7 +4,7 @@
     <dock name="__dock_1" floating="no" width="-1" height="-1" floatx="0" floaty="0" skip-taskbar="yes">
       <paned orientation="vertical" locked="no" iconified="no" closed="no" position="364">
         <paned orientation="horizontal" locked="no" iconified="no" closed="no" position="284">
-          <notebook orientation="vertical" locked="no" iconified="no" closed="no" page="0">
+          <notebook orientation="vertical" locked="no" iconified="no" closed="no" page="1">
             <item name="AnjutaFileManager" orientation="vertical" locked="no" iconified="no" closed="no"/>
             <item name="AnjutaProjectManager" orientation="vertical" locked="no" iconified="no" closed="no"/>
             <item name="AnjutaSymbolBrowser" orientation="horizontal" locked="no" iconified="no" closed="yes"/>
@@ -32,14 +32,14 @@
             <notebook orientation="vertical" locked="no" iconified="no" closed="yes" page="-1"/>
           </paned>
         </paned>
-        <notebook orientation="vertical" locked="no" iconified="no" closed="no" page="4">
+        <notebook orientation="vertical" locked="no" iconified="no" closed="no" page="6">
           <item name="AnjutaDebuggerStack" orientation="horizontal" locked="no" iconified="no" closed="yes"/>
           <item name="AnjutaDebuggerLocals" orientation="horizontal" locked="no" iconified="no" closed="yes"/>
           <item name="AnjutaDebuggerWatch" orientation="vertical" locked="no" iconified="no" closed="yes"/>
           <item name="AnjutaDebuggerBreakpoints" orientation="vertical" locked="no" iconified="no" closed="yes"/>
           <item name="AnjutaTerminal" orientation="vertical" locked="no" iconified="no" closed="no"/>
           <item name="search_files" orientation="vertical" locked="no" iconified="no" closed="yes"/>
-          <item name="AnjutaMessageView" orientation="vertical" locked="no" iconified="no" closed="yes"/>
+          <item name="AnjutaMessageView" orientation="vertical" locked="no" iconified="no" closed="no"/>
         </notebook>
       </paned>
     </dock>

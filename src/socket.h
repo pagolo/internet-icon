@@ -18,7 +18,7 @@
 #ifndef SOCKET
 #define SOCKET int
 #endif  /*  */
-#define closesocket    close
+#define closesocket(d)    if(d>=0) close(d)
   
 #define NO_SOCKET -1
 #define NO_FILE NO_SOCKET

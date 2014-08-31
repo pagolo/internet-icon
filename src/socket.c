@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "socket.h"
 #include "main.h"
+#include "mylocale.h"
 
 extern Config cfg;
 
@@ -43,7 +44,7 @@ test_connection (const char *ip, int port)
   // Create socket 
   int soc = create_socket (&arg, -1);
   if (soc < 0) {
-    fprintf (stderr, "Error creating socket\n");
+    fprintf (stderr, _("Error creating socket\n"));
     return (0);
   }
 
@@ -64,27 +65,26 @@ test_connection (const char *ip, int port)
         lon = sizeof (int);
         getsockopt (soc, SOL_SOCKET, SO_ERROR, (void *) (&valopt), &lon);
         if (valopt) {
-          fprintf (stderr, "Error in connection() %d - %s\n", valopt,
+          fprintf (stderr, _("Error in connection %d - %s\n"), valopt,
                    strerror (valopt));
-          close (soc);
+          closesocket (soc);
           return (0);
         }
       }
       else {
-        fprintf (stderr, "Timeout or error() %d - %s\n", valopt,
-                 strerror (valopt));
-        close (soc);
+        fprintf (stderr, _("Timeout reached.\n"));
+        closesocket (soc);
         return (0);
       }
     }
     else {
-      fprintf (stderr, "Error connecting %d - %s\n", errno, strerror (errno));
-      close (soc);
+      fprintf (stderr, _("Error calling connect() %d - %s\n"), errno, strerror (errno));
+      closesocket (soc);
       return (0);
     }
   }
 
-  close (soc);
+  closesocket (soc);
   return 1;
 }
 
@@ -137,13 +137,13 @@ get_lan_ip (void)
     return (0);
   }
 
-  MyData->WanIp = strdup("<i>Waiting for wan ip...</i>");
+  MyData->WanIp = mysprintf ("<i>%s</i>", _("Waiting for wan ip..."));
 
   /* Query available interfaces. */
   ifc.ifc_len = sizeof (buf);
   ifc.ifc_buf = buf;
   if (ioctl (soc, SIOCGIFCONF, &ifc) < 0) {
-    fprintf (stderr, "ioctl(SIOCGIFCONF)\n");
+    fprintf (stderr, "Query interfaces error\n");
     closesocket(soc);
     free(MyData);
     return NULL;
@@ -160,9 +160,10 @@ get_lan_ip (void)
     if (strcmp (item->ifr_name, "lo") == 0)
       continue;
     If = calloc (1, sizeof (*If));
-    If->IpString = mysprintf ("%s\t<i>(device <b>%s</b>)</i>",
-                              get_ip_str ((void *) &(item->ifr_addr), ip,
-                                          IPLEN), item->ifr_name);
+    If->IpString = mysprintf ("%s\t<i>(%s <b>%s</b>)</i>",
+                              get_ip_str ((void *) &(item->ifr_addr), ip, IPLEN), 
+                              _("device"),
+                              item->ifr_name);
     if (IfStart == NULL)
       IfStart = If;
     else {
@@ -209,7 +210,7 @@ get_wan_ip (AllIp *MyData)
   MyData->WanIp = NULL;
 
   if (!(get_domain_and_page (&domain, &page))) {
-    fprintf (stderr, "Error hadling strings (%d %s)\n", errno,
+    fprintf (stderr, _("Error hadling strings (%d %s)\n"), errno,
              strerror (errno));
     MyData->WanIp = strdup("<i>Memory problems.</i>");
     return MyData;
@@ -217,24 +218,25 @@ get_wan_ip (AllIp *MyData)
   
   Host = (struct hostent *) gethostbyname (domain);
   if (Host == NULL) {
-    fprintf (stderr, "Error getting host address (%d %s)\n", errno,
+    fprintf (stderr, _("Error getting host address (%d %s)\n"), errno,
              strerror (errno));
-    MyData->WanIp = strdup("<i>Error getting host address.</i>");
+    MyData->WanIp = mysprintf("<i>%s</i>", _("Error getting host address."));
     return MyData;
   }
   free(domain);
 
+  char *err_soc = _("Error creating socket");
   int soc = create_socket (&arg, -1);
   if (soc < 0) {
-    fprintf (stderr, "Error creating socket (%d %s)\n", errno,
+    fprintf (stderr, "%s (%d %s)\n", err_soc, errno,
              strerror (errno));
-    MyData->WanIp = strdup("<i>Error creating socket.</i>");
+    MyData->WanIp = mysprintf("<i>%s.</i>", err_soc);
     return MyData;
   }
 
   // Trying to connect
   res = -1;
-  MyData->WanIp = strdup("Can't retrive wan ip.");
+  MyData->WanIp = strdup(_("Can't retrive wan ip."));
   
   for (i = 0; Host->h_addr_list[i]; i++) {
     //printf("loop counter = %d\n", i);
@@ -255,13 +257,13 @@ get_wan_ip (AllIp *MyData)
           lon = sizeof (int);
           getsockopt (soc, SOL_SOCKET, SO_ERROR, (void *) (&valopt), &lon);
           if (valopt) {
-            fprintf (stderr, "Error in connection() %d - %s\n", valopt,
+            fprintf (stderr, "%s %d - %s\n", _("Error in connection()"), valopt,
                      strerror (valopt));
             soc = create_socket (&arg, soc);
             if (soc < 0) {
-              fprintf (stderr, "Error creating socket (%d %s)\n", errno,
+              fprintf (stderr, "%s (%d %s)\n", err_soc, errno,
                        strerror (errno));
-              MyData->WanIp = strdup("<i>Error creating socket.</i>");
+              MyData->WanIp = mysprintf("<i>%s.</i>", err_soc);
               return MyData;
             }
             continue;
@@ -274,43 +276,47 @@ get_wan_ip (AllIp *MyData)
           shutdown(soc, SHUT_RDWR);
           soc = create_socket (&arg, soc);
           if (soc < 0) {
-            fprintf (stderr, "Error creating socket (%d %s)\n", errno,
+            fprintf (stderr, "%s (%d %s)\n", err_soc, errno,
                        strerror (errno));
-            MyData->WanIp = strdup("<i>Error creating socket.</i>");
+            MyData->WanIp = mysprintf("<i>%s.</i>", err_soc);
             return MyData;
           }
           continue;
         }
       }
       else {
-        fprintf (stderr, "Error connecting %d - %s\n", errno, strerror (errno));
-        close (soc);
+        fprintf (stderr, "%s %d - %s\n", _("Error in connection"), errno, strerror (errno));
+        closesocket (soc);
         return (MyData);
       }
     }
   }
 
   if (fcntl (soc, F_SETFL, arg) < 0) {
-    fprintf (stderr, "Error setting socket flags (%d %s)\n", errno,
+    fprintf (stderr, "%s (%d %s)\n",
+             _("Error setting socket flags"),
+             errno,
              strerror (errno));
-    MyData->WanIp = strdup("<i>Error setting socket flags.</i>");
+    MyData->WanIp = mysprintf("<i>%s.</i>", _("Error setting socket flags"));
     return MyData;
   }
 
   request = mysprintf (request_format, page, cfg.user_agent);
   free (page);
   if (request == NULL) {
-    fprintf (stderr, "Error hadling strings (%d %s)\n", errno,
+    fprintf (stderr, "%s (%d %s)\n",
+             _("Error handling strings"),
+             errno,
              strerror (errno));
-    close (soc);
-    MyData->WanIp = strdup ("<i>Memory problems.</i>");
+    closesocket (soc);
+    MyData->WanIp = mysprintf ("<i>%s.</i>", _("Insufficient memory"));
     return MyData;
   }
     
   if (write (soc, request, strlen (request)) < 1) {
-    fprintf (stderr, "request ip failed\n");
-    close (soc);
-    MyData->WanIp = strdup("<i>Can't find wan ip.</i>");
+    fprintf (stderr, _("request ip failed\n"));
+    closesocket (soc);
+    MyData->WanIp = mysprintf("<i>%s.</i>", _("Can't find wan ip"));
     return MyData;
   }
 
@@ -318,8 +324,8 @@ get_wan_ip (AllIp *MyData)
     char buffer[IPLEN] = {0};
     int nchars = read (soc, buffer, IPLEN);
     if (nchars < 1) {
-      fprintf (stderr, "Can't retrive wan ip\n");
-      MyData->WanIp = strdup("Can't retrive wan ip.");
+      fprintf (stderr, "%s\n", _("Can't retrive wan ip"));
+      MyData->WanIp = mysprintf("%s.", _("Can't retrive wan ip"));
       return MyData;
     }
     {
@@ -329,10 +335,10 @@ get_wan_ip (AllIp *MyData)
       if (z)
         *z = '\0';
     }
-    MyData->WanIp = mysprintf ("%s\t<i>(<b>WAN/Public</b>)</i>", buffer);
+    MyData->WanIp = mysprintf ("%s\t<i>(<b>%s</b>)</i>", buffer, _("WAN/Public"));
   }
   
-  close (soc);
+  closesocket (soc);
   return MyData;
 }
 

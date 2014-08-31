@@ -1,4 +1,5 @@
 #include "findtask.h"
+#include "mylocale.h"
 
 int
 find_task (char *inputName)
@@ -52,7 +53,7 @@ find_task (char *inputName)
             }
             if (getline (&uidBuffer, &uidSize, uid) > 0) {
               if (atoi (uidBuffer) == geteuid ()) {
-                printf ("Process %s, userid %s\n", taskName, uidBuffer);
+                printf (_("Process %s, userid %s\n"), taskName, uidBuffer);
                 ++found;
               }
             }

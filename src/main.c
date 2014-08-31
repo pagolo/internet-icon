@@ -9,8 +9,6 @@
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
 #include <unistd.h>
-#include <locale.h>
-#include <libintl.h>
 #include "socket.h"
 #include "findtask.h"
 #include "xml.h"
@@ -41,7 +39,7 @@ static gboolean
 check_internet (void)
 {
   int rc = test_connection (cfg.test_ip, cfg.test_port);
-  printf ("success = %d\n", rc);
+  printf (_("connection %s ok\n"), rc ? "" : _("not"));
   return (gboolean) rc;
 }
 
@@ -59,11 +57,11 @@ tray_about (GtkMenuItem * item, gpointer window)
 
   GtkWidget *dialog = gtk_about_dialog_new ();
   gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), "Internet Icon");
-  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (dialog), "0.1");
+  gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (dialog), VERSION);
   gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (dialog),
                                   "(c) Paolo Bozzo");
   gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG (dialog),
-                                 "InternetIcon is a simple tool that shows your internet status.");
+                                 _("InternetIcon is a simple tool that shows your internet status."));
   gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), 
                                "https://github.com/pagolo/internet-icon");
   gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG (dialog), pixbuf);
@@ -110,7 +108,7 @@ set_dialog_content (gpointer data)
     content = build_dialog_string (MyData);
     if (GTK_IS_MESSAGE_DIALOG (dialog) && content) {
       gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG(dialog), content);
-      GtkWidget *button = gtk_dialog_add_button (GTK_DIALOG(dialog), "Close", 1234);
+      GtkWidget *button = gtk_dialog_add_button (GTK_DIALOG(dialog), _("Close"), 1234);
       if (button) {
         g_signal_connect_swapped (button, "activate", G_CALLBACK(gtk_widget_destroy), dialog);
         gtk_widget_grab_focus (GTK_WIDGET (button));
@@ -171,7 +169,7 @@ create_tray_icon (GtkWidget * menu)
 
   tray_icon = gtk_status_icon_new ();
   if (tray_icon == NULL) {
-    fprintf (stderr, "Can't create status icon");
+    fprintf (stderr, _("Can't create status icon.\n"));
     exit (5);
   }
   if (menu)
@@ -189,9 +187,9 @@ create_menu ()
   menu = gtk_menu_new ();
   if (menu == NULL)
     return NULL;
-  menuItemIP = gtk_menu_item_new_with_label ("Your IP");
-  menuItemAbout = gtk_menu_item_new_with_label ("About");
-  menuItemExit = gtk_menu_item_new_with_label ("Exit");
+  menuItemIP = gtk_menu_item_new_with_label (_("Your IP"));
+  menuItemAbout = gtk_menu_item_new_with_label (_("About"));
+  menuItemExit = gtk_menu_item_new_with_label (_("Exit"));
   if (!menuItemIP || !menuItemAbout || !menuItemExit)
     return NULL;
   g_signal_connect (G_OBJECT (menuItemIP), "activate", G_CALLBACK (show_info),
@@ -223,11 +221,11 @@ internet_update (gpointer data)
     
   if (check_internet ()) {
     pdata = (GdkPixdata *) & my_pixbuf_ok;
-    tooltip = "Internet connection available";
+    tooltip = _("Internet connection available");
   }
   else {
     pdata = (GdkPixdata *) & my_pixbuf_ko;
-    tooltip = "No internet connection available";
+    tooltip = _("No internet connection available");
   }
   gtk_status_icon_set_from_pixbuf (*tray_icon,
                                    gdk_pixbuf_from_pixdata (pdata, TRUE,
@@ -249,18 +247,16 @@ main (int argc, char *argv[])
 
   if (find_task (argv[0])) {
     printf (_("Program is already active for this user.\n"));
-    return (5);
+    return (EXIT_FAILURE);
   }
 
   parse_config();
 
   gtk_init (&argc, &argv);
 
-  //tray_icon = create_tray_icon (create_menu ());
-
   g_timeout_add_seconds (cfg.timeout_seconds, internet_update, &tray_icon);
 
   gtk_main ();
 
-  return 0;
+  return EXIT_SUCCESS;
 }

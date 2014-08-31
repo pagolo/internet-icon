@@ -22,7 +22,8 @@ findtask.o: findtask.c /usr/include/stdc-predef.h findtask.h \
  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
  /usr/include/bits/stdio.h /usr/include/libgen.h /usr/include/unistd.h \
  /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
- /usr/include/bits/confname.h /usr/include/getopt.h
+ /usr/include/bits/confname.h /usr/include/getopt.h mylocale.h \
+ /usr/include/locale.h /usr/include/bits/locale.h /usr/include/libintl.h
 
 /usr/include/stdc-predef.h:
 
@@ -125,3 +126,11 @@ findtask.h:
 /usr/include/bits/confname.h:
 
 /usr/include/getopt.h:
+
+mylocale.h:
+
+/usr/include/locale.h:
+
+/usr/include/bits/locale.h:
+
+/usr/include/libintl.h:

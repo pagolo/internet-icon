@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: internet_icon 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-31 21:41+0200\n"
-"PO-Revision-Date: 2014-08-31 21:56+0100\n"
+"POT-Creation-Date: 2014-08-31 22:19+0200\n"
+"PO-Revision-Date: 2014-08-31 22:20+0100\n"
 "Last-Translator: \n"
 "Language-Team: pagolo <pagolo.bozzo@gmail.com>\n"
 "Language: it_IT.UTF-8\n"
@@ -36,6 +36,10 @@ msgstr ""
 #: ../src/main.c:111
 msgid "Close"
 msgstr "Chiudi"
+
+#: ../src/main.c:152
+msgid "Your ip addresses"
+msgstr "I tuoi indirizzi ip"
 
 #: ../src/main.c:172
 #, c-format
@@ -159,22 +163,22 @@ msgstr "Impossibile prelevare l'ip pubblico"
 msgid "WAN/Public"
 msgstr "WAN/Pubblico"
 
-#: ../src/xml.c:128
+#: ../src/xml.c:126
 #, c-format
 msgid "Can't chdir to home\n"
 msgstr "Impossibile passare alla cartella home.\n"
 
-#: ../src/xml.c:135
+#: ../src/xml.c:133
 #, c-format
 msgid "Can't create configuration file\n"
 msgstr "Impossibile creare il file di configurazione.\n"
 
-#: ../src/xml.c:144
+#: ../src/xml.c:142
 #, c-format
 msgid "Configuration: empty document\n"
 msgstr "Il file di configurazione è vuoto.\n"
 
-#: ../src/xml.c:150
+#: ../src/xml.c:148
 #, c-format
 msgid "Configuration: document of the wrong type, root node != internet_icon\n"
 msgstr "File di configurazione errato, nodo radice scorretto.\n"

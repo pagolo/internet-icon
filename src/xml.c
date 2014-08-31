@@ -7,8 +7,6 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <libxml/xmlwriter.h>
-#include <locale.h>
-#include <libintl.h>
 #include "mylocale.h"
 #include "xml.h"
 #include "main.h"

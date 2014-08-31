@@ -149,7 +149,7 @@ show_info (GtkWidget * widget, gpointer window)
     free_all_ip (MyData);
     return;
   }
-  gtk_window_set_title (GTK_WINDOW (dialog), "Your ip addresses");
+  gtk_window_set_title (GTK_WINDOW (dialog), _("Your ip addresses"));
   transmit[_DIALOG] = (void *)dialog;
   transmit[_MYDATA] = (void *)MyData;
 

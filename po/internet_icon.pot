@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-31 21:41+0200\n"
+"POT-Creation-Date: 2014-08-31 22:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,6 +32,10 @@ msgstr ""
 
 #: ../src/main.c:111
 msgid "Close"
+msgstr ""
+
+#: ../src/main.c:152
+msgid "Your ip addresses"
 msgstr ""
 
 #: ../src/main.c:172
@@ -156,22 +160,22 @@ msgstr ""
 msgid "WAN/Public"
 msgstr ""
 
-#: ../src/xml.c:128
+#: ../src/xml.c:126
 #, c-format
 msgid "Can't chdir to home\n"
 msgstr ""
 
-#: ../src/xml.c:135
+#: ../src/xml.c:133
 #, c-format
 msgid "Can't create configuration file\n"
 msgstr ""
 
-#: ../src/xml.c:144
+#: ../src/xml.c:142
 #, c-format
 msgid "Configuration: empty document\n"
 msgstr ""
 
-#: ../src/xml.c:150
+#: ../src/xml.c:148
 #, c-format
 msgid "Configuration: document of the wrong type, root node != internet_icon\n"
 msgstr ""

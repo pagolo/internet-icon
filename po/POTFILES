@@ -1,1 +1,5 @@
-	../src/main.c
+	../src/main.c \
+	../src/findtask.c \
+	../src/socket.c \
+	../src/utils.c \
+	../src/xml.c

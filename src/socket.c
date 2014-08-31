@@ -137,7 +137,7 @@ get_lan_ip (void)
     return (0);
   }
 
-  MyData->WanIp = strdup("Wait please...\t<i>(<b>WAN/Public</b>)</i>");
+  MyData->WanIp = strdup("<i>Waiting for wan ip...</i>");
 
   /* Query available interfaces. */
   ifc.ifc_len = sizeof (buf);
@@ -237,7 +237,7 @@ get_wan_ip (AllIp *MyData)
   MyData->WanIp = strdup("Can't retrive wan ip.");
   
   for (i = 0; Host->h_addr_list[i]; i++) {
-    printf("loop counter = %d\n", i);
+    //printf("loop counter = %d\n", i);
     memcpy ((char *) &INetSocketAddr.sin_addr, Host->h_addr_list[i],
             Host->h_length);
     INetSocketAddr.sin_family = Host->h_addrtype;

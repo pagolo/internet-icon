@@ -28,7 +28,6 @@ int write_config(void) {
    * written */
   buf = xmlBufferCreate();
   if (buf == NULL) {
-    //printf("testXmlwriterMemory: perror creating the xml buffer\n");
     return 0;
   }
 
@@ -41,7 +40,7 @@ int write_config(void) {
   }
 #else
   // create the file
-  writer = xmlNewTextWriterFilename(globaldata.gd_config_root ? CONFIG_NAME_ROOT : CONFIG_NAME, 0);
+  writer = xmlNewTextWriterFilename(config_name, 0);
   if (writer == NULL) return 0;
 #endif
 
@@ -126,15 +125,15 @@ parse_config(void) {
   char *home = getenv("HOME");
 
   if (!(home && !chdir(home))) {
-    perror(_("Can't chdir to home"));
+    fprintf(stderr, _("Can't chdir to home\n"));
     return;
   }
 
   doc = xmlParseFile(".internet_icon.conf");
   if (doc == NULL) {
-    perror(_("Configuration xml document not parsed successfully. \n"));
-    // test if success
-    write_config();
+    if (!(write_config())) {
+      fprintf(stderr, _("Can't create configuration file\n"));
+    }
     return;
   }
 
@@ -142,13 +141,13 @@ parse_config(void) {
 
   if (cur == NULL) {
     xmlFreeDoc(doc);
-    perror(_("Configuration: empty document\n"));
+    fprintf(stderr, _("Configuration: empty document\n"));
     return;
   }
 
   if (xmlStrcmp(cur->name, (const xmlChar *) "internet_icon") != 0) {
     xmlFreeDoc(doc);
-    perror(_("Configuration: document of the wrong type, root node != internet_icon"));
+    fprintf(stderr, _("Configuration: document of the wrong type, root node != internet_icon\n"));
     return;
   }
 

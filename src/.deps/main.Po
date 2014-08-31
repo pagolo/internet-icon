@@ -551,8 +551,9 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvscale.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvscrollbar.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvseparator.h \
- /usr/include/gdk-pixbuf-2.0/gdk-pixbuf/gdk-pixdata.h socket.h \
- /usr/include/stdlib.h /usr/include/bits/waitflags.h \
+ /usr/include/gdk-pixbuf-2.0/gdk-pixbuf/gdk-pixdata.h \
+ /usr/include/locale.h /usr/include/bits/locale.h /usr/include/libintl.h \
+ socket.h /usr/include/stdlib.h /usr/include/bits/waitflags.h \
  /usr/include/bits/waitstatus.h /usr/include/alloca.h \
  /usr/include/bits/stdlib-bsearch.h /usr/include/bits/stdlib-float.h \
  /usr/include/string.h /usr/include/bits/string.h \
@@ -574,7 +575,7 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/sys/ttydefaults.h /usr/include/fcntl.h \
  /usr/include/bits/fcntl.h /usr/include/bits/fcntl-linux.h \
  /usr/include/net/if.h /usr/include/arpa/inet.h findtask.h \
- /usr/include/libgen.h xml.h utils.h main.h
+ /usr/include/libgen.h xml.h utils.h main.h mylocale.h
 
 /usr/include/stdc-predef.h:
 
@@ -1816,6 +1817,12 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 
 /usr/include/gdk-pixbuf-2.0/gdk-pixbuf/gdk-pixdata.h:
 
+/usr/include/locale.h:
+
+/usr/include/bits/locale.h:
+
+/usr/include/libintl.h:
+
 socket.h:
 
 /usr/include/stdlib.h:
@@ -1913,3 +1920,5 @@ xml.h:
 utils.h:
 
 main.h:
+
+mylocale.h:

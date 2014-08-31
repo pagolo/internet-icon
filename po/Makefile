@@ -66,7 +66,11 @@ DISTFILES = Makefile.in.in POTFILES.in $(POFILES)
 EXTRA_DISTFILES = ChangeLog POTFILES.skip Makevars LINGUAS
 
 POTFILES = \
-	../src/main.c
+	../src/main.c \
+	../src/findtask.c \
+	../src/socket.c \
+	../src/utils.c \
+	../src/xml.c
 
 CATALOGS=$(shell LINGUAS="$(USE_LINGUAS)"; for lang in $$LINGUAS; do printf "$$lang.gmo "; done)
 

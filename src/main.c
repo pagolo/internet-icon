@@ -9,11 +9,14 @@
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
 #include <unistd.h>
+#include <locale.h>
+#include <libintl.h>
 #include "socket.h"
 #include "findtask.h"
 #include "xml.h"
 #include "utils.h"
 #include "main.h"
+#include "mylocale.h"
 
 // status for ip dialog
 static guint status = STATUS_NO_MESSAGE;
@@ -55,16 +58,14 @@ tray_about (GtkMenuItem * item, gpointer window)
   GdkPixbuf *pixbuf = gdk_pixbuf_from_pixdata (&my_pixbuf_ok, TRUE, &error);
 
   GtkWidget *dialog = gtk_about_dialog_new ();
-//  gtk_about_dialog_set_name(GTK_ABOUT_DIALOG(dialog), "InternetIcon");
+  gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), "Internet Icon");
   gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (dialog), "0.1");
   gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (dialog),
                                   "(c) Paolo Bozzo");
   gtk_about_dialog_set_comments (GTK_ABOUT_DIALOG (dialog),
                                  "InternetIcon is a simple tool that shows your internet status.");
-  /*
-     gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), 
-     "http://www.casabozzo.net");
-   */
+  gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), 
+                               "https://github.com/pagolo/internet-icon");
   gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG (dialog), pixbuf);
   g_object_unref (pixbuf), pixbuf = NULL;
   gtk_dialog_run (GTK_DIALOG (dialog));
@@ -140,7 +141,7 @@ show_info (GtkWidget * widget, gpointer window)
   content = build_dialog_string (MyData);
   
   dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (window),
-                                               GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               0, //GTK_DIALOG_DESTROY_WITH_PARENT,
                                                GTK_MESSAGE_INFO,
                                                GTK_BUTTONS_NONE,
                                                content);
@@ -154,7 +155,7 @@ show_info (GtkWidget * widget, gpointer window)
   transmit[_DIALOG] = (void *)dialog;
   transmit[_MYDATA] = (void *)MyData;
 
-  g_timeout_add (200, set_dialog_content, transmit);
+  g_timeout_add (300, set_dialog_content, transmit);
   
   status = STATUS_MESSAGE_FIRST;
 
@@ -241,8 +242,13 @@ main (int argc, char *argv[])
 {
   GtkStatusIcon *tray_icon = NULL;
 
+  setlocale(LC_ALL, getenv("LANG"));
+  bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+  textdomain(GETTEXT_PACKAGE);
+
+
   if (find_task (argv[0])) {
-    printf ("Program is already active for this user.\n");
+    printf (_("Program is already active for this user.\n"));
     return (5);
   }
 

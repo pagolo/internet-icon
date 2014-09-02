@@ -14,6 +14,8 @@
 
 extern Config cfg;
 
+static char *flag_value[] = {"no", "yes", "auto"};
+
 int write_config(void) {
   int rc, result = 0;
   char *config_name = ".internet_icon.conf";
@@ -74,6 +76,18 @@ int write_config(void) {
   // newline
   rc = xmlTextWriterWriteString(writer, BAD_CAST "\n  ");
   if (rc < 0) goto finish;
+  // status icon use
+  rc = xmlTextWriterWriteElement(writer, BAD_CAST "status_icon", BAD_CAST flag_value[cfg.status_icon]);
+  if (rc < 0) goto finish;
+  // newline
+  rc = xmlTextWriterWriteString(writer, BAD_CAST "\n  ");
+  if (rc < 0) goto finish;
+  // notification use
+  rc = xmlTextWriterWriteElement(writer, BAD_CAST "notification", BAD_CAST flag_value[cfg.notification]);
+  if (rc < 0) goto finish;
+  // newline
+  rc = xmlTextWriterWriteString(writer, BAD_CAST "\n  ");
+  if (rc < 0) goto finish;
   // wan ip page
   rc = xmlTextWriterWriteElement(writer, BAD_CAST "wan_ip_page", BAD_CAST cfg.wanip_page);
   if (rc < 0) goto finish;
@@ -113,6 +127,14 @@ finish:
   xmlBufferFree(buf);
 #endif
   return result;
+}
+
+int get_flag(const char *s) {
+  int i;
+  for (i = 0; i < _END; i++)
+    if (strcasecmp (s, flag_value[i]) == 0)
+      return i;
+  return _DISABLE;
 }
 
 void
@@ -171,6 +193,18 @@ parse_config(void) {
         cfg.test_port = atoi((const char *)key);
         if (cfg.test_port < 1)
           cfg.test_port = 80;
+      }
+    }
+    if ((!xmlStrcmp(cur->name, (const xmlChar *) "status_icon"))) {
+      xmlChar *key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+      if (key && *key) {
+        cfg.status_icon = get_flag((const char *)key);
+      }
+    }
+    if ((!xmlStrcmp(cur->name, (const xmlChar *) "notification"))) {
+      xmlChar *key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
+      if (key && *key) {
+        cfg.notification = get_flag((const char *)key);
       }
     }
     if ((!xmlStrcmp(cur->name, (const xmlChar *) "wan_ip_page"))) {

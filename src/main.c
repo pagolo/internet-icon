@@ -20,7 +20,7 @@
 static guint status = STATUS_NO_MESSAGE;
 
 // allocate config and set defaults
-Config cfg = { 15, "auto", 53, "ifconfig.me/ip", "InternetIcon/0.1"};
+Config cfg = { 15, "auto", 53, _ENABLE, _AUTO, "ifconfig.me/ip", "InternetIcon/0.1"};
 
 // internet icons
 extern const GdkPixdata my_pixbuf_ok;

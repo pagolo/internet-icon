@@ -20,7 +20,7 @@
 static guint status = STATUS_NO_MESSAGE;
 
 // allocate config and set defaults
-Config cfg = { 15, "8.8.8.8", 53, "ifconfig.me/ip", "InternetIcon/0.1"};
+Config cfg = { 15, "auto", 53, "ifconfig.me/ip", "InternetIcon/0.1"};
 
 // internet icons
 extern const GdkPixdata my_pixbuf_ok;
@@ -38,9 +38,31 @@ tray_icon_on_menu (GtkStatusIcon * status_icon, guint button,
 static gboolean
 check_internet (void)
 {
-  int rc = test_connection (cfg.test_ip, cfg.test_port);
-  printf (_("connection %s ok\n"), rc ? "" : _("not"));
-  return (gboolean) rc;
+  int i;
+  gboolean tested = FALSE;
+  
+  if (strcasecmp(cfg.test_ip, "auto") != 0) {
+    return (gboolean) test_connection (inet_addr (cfg.test_ip), cfg.test_port);
+  }
+	for (i = 0; i < MAXNS; i++) {
+    char *ip = inet_ntoa(_res.nsaddr_list[i].sin_addr);
+    if (
+         strstr(ip, "255.") == ip ||
+         strstr(ip, "0.") == ip ||
+         strstr(ip, "127.") == ip ||
+         strstr(ip, "10.") == ip ||
+         strstr(ip, "192.168.") == ip
+       )
+      continue;
+    if (test_connection (_res.nsaddr_list[i].sin_addr.s_addr, cfg.test_port))
+      return TRUE;
+    tested = TRUE;
+  }
+
+  if (!(tested))
+    return (gboolean) test_connection (inet_addr ("8.8.8.8"), cfg.test_port);
+  
+  return FALSE;
 }
 
 static void
@@ -254,6 +276,8 @@ main (int argc, char *argv[])
   }
 
   parse_config();
+
+  res_init();
 
   gtk_init (&argc, &argv);
 

@@ -32,7 +32,7 @@ create_socket(long *arg, SOCKET old)
   return new;
 }
 int
-test_connection (const char *ip, int port)
+test_connection (in_addr_t ip, int port)
 {
   int res, valopt;
   struct sockaddr_in addr;
@@ -40,9 +40,10 @@ test_connection (const char *ip, int port)
   fd_set myset;
   struct timeval tv;
   socklen_t lon;
+  int soc = -1;
 
   // Create socket 
-  int soc = create_socket (&arg, -1);
+  soc = create_socket (&arg, soc);
   if (soc < 0) {
     fprintf (stderr, _("Error creating socket\n"));
     return (0);
@@ -52,7 +53,7 @@ test_connection (const char *ip, int port)
   // Trying to connect with timeout 
   addr.sin_family = AF_INET;
   addr.sin_port = htons (port);
-  addr.sin_addr.s_addr = inet_addr (ip);
+  addr.sin_addr.s_addr = ip;
   res = connect (soc, (struct sockaddr *) &addr, sizeof (addr));
 
   if (res < 0) {

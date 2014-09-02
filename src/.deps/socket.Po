@@ -29,7 +29,20 @@ socket.o: socket.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/sockaddr.h /usr/include/asm/socket.h \
  /usr/include/asm-generic/socket.h /usr/include/asm/sockios.h \
  /usr/include/asm-generic/sockios.h /usr/include/bits/in.h \
- /usr/include/rpc/netdb.h /usr/include/bits/netdb.h \
+ /usr/include/rpc/netdb.h /usr/include/bits/netdb.h /usr/include/resolv.h \
+ /usr/include/sys/param.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/limits.h \
+ /usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/syslimits.h \
+ /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+ /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+ /usr/include/bits/posix2_lim.h /usr/include/signal.h \
+ /usr/include/bits/signum.h /usr/include/bits/siginfo.h \
+ /usr/include/bits/sigaction.h /usr/include/bits/sigcontext.h \
+ /usr/include/bits/sigstack.h /usr/include/sys/ucontext.h \
+ /usr/include/bits/sigthread.h /usr/include/bits/param.h \
+ /usr/include/linux/param.h /usr/include/asm/param.h \
+ /usr/include/asm-generic/param.h /usr/include/arpa/nameser.h \
+ /usr/include/sys/bitypes.h /usr/include/arpa/nameser_compat.h \
  /usr/include/sys/stat.h /usr/include/bits/stat.h \
  /usr/include/sys/ioctl.h /usr/include/bits/ioctls.h \
  /usr/include/asm/ioctls.h /usr/include/asm-generic/ioctls.h \
@@ -172,6 +185,54 @@ socket.h:
 /usr/include/rpc/netdb.h:
 
 /usr/include/bits/netdb.h:
+
+/usr/include/resolv.h:
+
+/usr/include/sys/param.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/limits.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/syslimits.h:
+
+/usr/include/limits.h:
+
+/usr/include/bits/posix1_lim.h:
+
+/usr/include/bits/local_lim.h:
+
+/usr/include/linux/limits.h:
+
+/usr/include/bits/posix2_lim.h:
+
+/usr/include/signal.h:
+
+/usr/include/bits/signum.h:
+
+/usr/include/bits/siginfo.h:
+
+/usr/include/bits/sigaction.h:
+
+/usr/include/bits/sigcontext.h:
+
+/usr/include/bits/sigstack.h:
+
+/usr/include/sys/ucontext.h:
+
+/usr/include/bits/sigthread.h:
+
+/usr/include/bits/param.h:
+
+/usr/include/linux/param.h:
+
+/usr/include/asm/param.h:
+
+/usr/include/asm-generic/param.h:
+
+/usr/include/arpa/nameser.h:
+
+/usr/include/sys/bitypes.h:
+
+/usr/include/arpa/nameser_compat.h:
 
 /usr/include/sys/stat.h:
 

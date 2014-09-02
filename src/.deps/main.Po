@@ -565,7 +565,11 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/sockaddr.h /usr/include/asm/socket.h \
  /usr/include/asm-generic/socket.h /usr/include/asm/sockios.h \
  /usr/include/asm-generic/sockios.h /usr/include/bits/in.h \
- /usr/include/rpc/netdb.h /usr/include/bits/netdb.h \
+ /usr/include/rpc/netdb.h /usr/include/bits/netdb.h /usr/include/resolv.h \
+ /usr/include/sys/param.h /usr/include/bits/param.h \
+ /usr/include/linux/param.h /usr/include/asm/param.h \
+ /usr/include/asm-generic/param.h /usr/include/arpa/nameser.h \
+ /usr/include/sys/bitypes.h /usr/include/arpa/nameser_compat.h \
  /usr/include/sys/stat.h /usr/include/bits/stat.h \
  /usr/include/sys/ioctl.h /usr/include/bits/ioctls.h \
  /usr/include/asm/ioctls.h /usr/include/asm-generic/ioctls.h \
@@ -1872,6 +1876,24 @@ socket.h:
 /usr/include/rpc/netdb.h:
 
 /usr/include/bits/netdb.h:
+
+/usr/include/resolv.h:
+
+/usr/include/sys/param.h:
+
+/usr/include/bits/param.h:
+
+/usr/include/linux/param.h:
+
+/usr/include/asm/param.h:
+
+/usr/include/asm-generic/param.h:
+
+/usr/include/arpa/nameser.h:
+
+/usr/include/sys/bitypes.h:
+
+/usr/include/arpa/nameser_compat.h:
 
 /usr/include/sys/stat.h:
 

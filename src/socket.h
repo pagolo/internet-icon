@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <netdb.h>
+#include <resolv.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -37,7 +38,7 @@ typedef struct _AllIp
   IpList *LanIpList;
 } AllIp;
 
-int test_connection (const char *ip, int port);
+int test_connection (in_addr_t ip, int port);
 AllIp *get_lan_ip (void);
 AllIp *get_wan_ip (AllIp *MyData);
 void free_all_ip (AllIp *MyData);

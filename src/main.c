@@ -163,11 +163,11 @@ show_info (GtkWidget * widget, gpointer window)
 }
 
 static GtkStatusIcon *
-create_tray_icon (GtkWidget * menu)
+create_tray_icon (GtkWidget * menu, GdkPixdata *pdata)
 {
   GtkStatusIcon *tray_icon;
 
-  tray_icon = gtk_status_icon_new ();
+  tray_icon = gtk_status_icon_new_from_pixbuf (gdk_pixbuf_from_pixdata (pdata, TRUE, NULL));
   if (tray_icon == NULL) {
     fprintf (stderr, _("Can't create status icon.\n"));
     exit (5);
@@ -210,15 +210,8 @@ internet_update (gpointer data)
 {
   GtkStatusIcon **tray_icon = (GtkStatusIcon **)data;
   GdkPixdata *pdata;
-  GError *error = NULL;
   gchar *tooltip;
 
-  if (!(*tray_icon)) {
-    *tray_icon = create_tray_icon (create_menu ());
-    if (!(*tray_icon))
-      return FALSE;
-  }
-    
   if (check_internet ()) {
     pdata = (GdkPixdata *) & my_pixbuf_ok;
     tooltip = _("Internet connection available");
@@ -227,10 +220,20 @@ internet_update (gpointer data)
     pdata = (GdkPixdata *) & my_pixbuf_ko;
     tooltip = _("No internet connection available");
   }
-  gtk_status_icon_set_from_pixbuf (*tray_icon,
+
+  if (!(*tray_icon)) {
+    *tray_icon = create_tray_icon (create_menu (), pdata);
+    if (!(*tray_icon))
+      return FALSE;
+  }
+  else {
+    gtk_status_icon_set_from_pixbuf (*tray_icon,
                                    gdk_pixbuf_from_pixdata (pdata, TRUE,
-                                                            &error));
+                                                            NULL));
+  }
+
   gtk_status_icon_set_tooltip_text (*tray_icon, tooltip);
+  gtk_status_icon_set_visible (*tray_icon, TRUE);
 
   return TRUE;
 }
@@ -253,6 +256,8 @@ main (int argc, char *argv[])
   parse_config();
 
   gtk_init (&argc, &argv);
+
+  internet_update (&tray_icon);
 
   g_timeout_add_seconds (cfg.timeout_seconds, internet_update, &tray_icon);
 

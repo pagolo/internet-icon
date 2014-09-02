@@ -9,6 +9,7 @@
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
 #include <unistd.h>
+#include <libnotify/notify.h>
 #include "socket.h"
 #include "findtask.h"
 #include "xml.h"
@@ -192,7 +193,13 @@ create_tray_icon (GtkWidget * menu, GdkPixdata *pdata)
   tray_icon = gtk_status_icon_new_from_pixbuf (gdk_pixbuf_from_pixdata (pdata, TRUE, NULL));
   if (tray_icon == NULL) {
     fprintf (stderr, _("Can't create status icon.\n"));
-    exit (5);
+    cfg.status_icon = _DISABLE;
+    return NULL;
+  }
+  if (gtk_status_icon_is_embedded (tray_icon) && cfg.status_icon == _AUTO) {
+    fprintf (stderr, _("Can't view status icon, disabling...\n"));
+    cfg.status_icon = _DISABLE;
+    return NULL;
   }
   if (menu)
     g_signal_connect (G_OBJECT (tray_icon),
@@ -233,6 +240,7 @@ internet_update (gpointer data)
   GtkStatusIcon **tray_icon = (GtkStatusIcon **)data;
   GdkPixdata *pdata;
   gchar *tooltip;
+  gboolean status_icon, notification;
 
   if (check_internet ()) {
     pdata = (GdkPixdata *) & my_pixbuf_ok;
@@ -276,6 +284,10 @@ main (int argc, char *argv[])
   }
 
   parse_config();
+  if (cfg.status_icon == _DISABLE && cfg.notification == _DISABLE) {
+    printf(_("Nothing to do, exiting...\n"));
+    return (EXIT_SUCCESS);
+  }
 
   res_init();
 

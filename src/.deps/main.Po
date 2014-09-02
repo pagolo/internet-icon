@@ -551,13 +551,15 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvscale.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvscrollbar.h \
  /usr/include/gtk-3.0/gtk/deprecated/gtkvseparator.h \
- /usr/include/gdk-pixbuf-2.0/gdk-pixbuf/gdk-pixdata.h socket.h \
- /usr/include/stdlib.h /usr/include/bits/waitflags.h \
- /usr/include/bits/waitstatus.h /usr/include/alloca.h \
- /usr/include/bits/stdlib-bsearch.h /usr/include/bits/stdlib-float.h \
- /usr/include/string.h /usr/include/bits/string.h \
- /usr/include/bits/string2.h /usr/include/netdb.h \
- /usr/include/netinet/in.h \
+ /usr/include/gdk-pixbuf-2.0/gdk-pixbuf/gdk-pixdata.h \
+ /usr/include/libnotify/notify.h /usr/include/libnotify/notification.h \
+ /usr/include/libnotify/notify-enum-types.h \
+ /usr/include/libnotify/notify-features.h socket.h /usr/include/stdlib.h \
+ /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
+ /usr/include/alloca.h /usr/include/bits/stdlib-bsearch.h \
+ /usr/include/bits/stdlib-float.h /usr/include/string.h \
+ /usr/include/bits/string.h /usr/include/bits/string2.h \
+ /usr/include/netdb.h /usr/include/netinet/in.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/stdint.h \
  /usr/include/stdint.h /usr/include/bits/wchar.h \
  /usr/include/sys/socket.h /usr/include/sys/uio.h /usr/include/bits/uio.h \
@@ -1820,6 +1822,14 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 /usr/include/gtk-3.0/gtk/deprecated/gtkvseparator.h:
 
 /usr/include/gdk-pixbuf-2.0/gdk-pixbuf/gdk-pixdata.h:
+
+/usr/include/libnotify/notify.h:
+
+/usr/include/libnotify/notification.h:
+
+/usr/include/libnotify/notify-enum-types.h:
+
+/usr/include/libnotify/notify-features.h:
 
 socket.h:
 

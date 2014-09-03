@@ -18,7 +18,7 @@
 #include "mylocale.h"
 
 // allocate config and set defaults
-Config cfg = { 15, "auto", 53, _ENABLE, _AUTO, "ifconfig.me/ip", "InternetIcon/0.1"};
+Config cfg = { 15, "auto", 53, _ENABLE, _AUTO, "ifconfig.me/ip", "InternetIcon/Get wan ip"};
 
 // internet icons
 extern const GdkPixdata my_pixbuf_ok;
@@ -72,10 +72,16 @@ tray_exit (GtkMenuItem * item, gpointer user_data)
 static void
 tray_about (GtkMenuItem * item, gpointer window)
 {
-  GError *error = NULL;
-  GdkPixbuf *pixbuf = gdk_pixbuf_from_pixdata (&my_pixbuf_ok, TRUE, &error);
-
+  GdkPixbuf *pixbuf = gdk_pixbuf_from_pixdata (&my_pixbuf_ok, TRUE, NULL);
+  if (!(pixbuf)) {
+    fprintf (stderr, _("Get pixbuf error...\n"));
+    return;
+  }
   GtkWidget *dialog = gtk_about_dialog_new ();
+  if (!(dialog)) {
+    fprintf (stderr, _("Can't create dialog...\n"));
+    return;
+  }
   gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), "Internet Icon");
   gtk_about_dialog_set_version (GTK_ABOUT_DIALOG (dialog), VERSION);
   gtk_about_dialog_set_copyright (GTK_ABOUT_DIALOG (dialog),
@@ -128,7 +134,7 @@ set_dialog_content (gpointer data)
     content = build_dialog_string (MyData);
     if (GTK_IS_MESSAGE_DIALOG (dialog) && content) {
       gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG(dialog), content);
-      GtkWidget *button = gtk_dialog_add_button (GTK_DIALOG(dialog), _("Close"), 1234);
+      GtkWidget *button = gtk_dialog_add_button (GTK_DIALOG(dialog), _("Close"), 0);
       if (button) {
         g_signal_connect_swapped (button, "activate", G_CALLBACK(gtk_widget_destroy), dialog);
         gtk_widget_grab_focus (GTK_WIDGET (button));
@@ -156,7 +162,7 @@ show_info (GtkWidget * widget, gpointer window)
   content = build_dialog_string (MyData);
   
   dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (window),
-                                               GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               0,
                                                GTK_MESSAGE_INFO,
                                                GTK_BUTTONS_NONE,
                                                content);

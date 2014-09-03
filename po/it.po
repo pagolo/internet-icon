@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: internet_icon 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-31 22:19+0200\n"
-"PO-Revision-Date: 2014-08-31 22:20+0100\n"
-"Last-Translator: \n"
+"POT-Creation-Date: 2014-09-03 18:43+0200\n"
+"PO-Revision-Date: 2014-09-03 18:52+0100\n"
+"Last-Translator: Paolo Bozzo <pagolo.bozzo@gmail.com>\n"
 "Language-Team: pagolo <pagolo.bozzo@gmail.com>\n"
 "Language: it_IT.UTF-8\n"
 "MIME-Version: 1.0\n"
@@ -19,166 +19,187 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
-#: ../src/main.c:42
+#: ../src/main.c:77
 #, c-format
-msgid "connection %s ok\n"
-msgstr "connessione %s attiva\n"
+msgid "Get pixbuf error...\n"
+msgstr "Rilevato errore immagine...\n"
 
-#: ../src/main.c:42
-msgid "not"
-msgstr "non"
+#: ../src/main.c:82
+#, c-format
+msgid "Can't create dialog...\n"
+msgstr "Impossibile creare la finestra di dialogo.\n"
 
-#: ../src/main.c:64
+#: ../src/main.c:90
 msgid "InternetIcon is a simple tool that shows your internet status."
 msgstr ""
 "InternetIcon è una semplice applicazione che mostra lo stato di internet."
 
-#: ../src/main.c:111
+#: ../src/main.c:137
 msgid "Close"
 msgstr "Chiudi"
 
-#: ../src/main.c:152
+#: ../src/main.c:175
 msgid "Your ip addresses"
 msgstr "I tuoi indirizzi ip"
 
-#: ../src/main.c:172
+#: ../src/main.c:198
 #, c-format
 msgid "Can't create status icon.\n"
 msgstr "Impossibile creare l'icona.\n"
 
-#: ../src/main.c:190
+#: ../src/main.c:203
+#, c-format
+msgid "Can't view status icon, disabling...\n"
+msgstr "Impossibile creare l'icona, disabilito la funzione...\n"
+
+#: ../src/main.c:222 ../src/main.c:287
 msgid "Your IP"
 msgstr "I tuoi IP"
 
-#: ../src/main.c:191
+#: ../src/main.c:223
 msgid "About"
 msgstr "Informazioni"
 
-#: ../src/main.c:192
+#: ../src/main.c:224
 msgid "Exit"
 msgstr "Esci"
 
-#: ../src/main.c:224
+#: ../src/main.c:250
 msgid "Internet connection available"
 msgstr "Connessione internet attiva"
 
-#: ../src/main.c:228
+#: ../src/main.c:254
 msgid "No internet connection available"
 msgstr "Nessuna connessione internet"
 
-#: ../src/main.c:249
+#: ../src/main.c:285
+msgid "Info"
+msgstr "Informazioni"
+
+#: ../src/main.c:309
 #, c-format
 msgid "Program is already active for this user.\n"
 msgstr "Il programma è già attivo per l'utente corrente.\n"
 
+#: ../src/main.c:324
+#, c-format
+msgid "Nothing to do, exiting...\n"
+msgstr "Niente da svolgere, esco...\n"
+
 #: ../src/findtask.c:56
 #, c-format
 msgid "Process %s, userid %s\n"
-msgstr "Processo %s, nome utente %s\n"
+msgstr "Processo %s, id utente %s\n"
 
-#: ../src/socket.c:48
+#: ../src/socket.c:49
 #, c-format
 msgid "Error creating socket\n"
 msgstr "Errore nella creazione del socket\n"
 
-#: ../src/socket.c:69
+#: ../src/socket.c:70
 #, c-format
 msgid "Error in connection %d - %s\n"
 msgstr "Errore nella connessione %d - %s\n"
 
-#: ../src/socket.c:76
+#: ../src/socket.c:77
 #, c-format
 msgid "Timeout reached.\n"
 msgstr "Tempo limite scaduto.\n"
 
-#: ../src/socket.c:82
+#: ../src/socket.c:83
 #, c-format
 msgid "Error calling connect() %d - %s\n"
 msgstr "Errore colla funzione connect() %d - %s\n"
 
-#: ../src/socket.c:141
+#: ../src/socket.c:142
 msgid "Waiting for wan ip..."
 msgstr "In attesa dell'ip pubblico..."
 
-#: ../src/socket.c:166
+#: ../src/socket.c:167
 msgid "device"
 msgstr "dispositivo"
 
-#: ../src/socket.c:214
+#: ../src/socket.c:215
 #, c-format
 msgid "Error hadling strings (%d %s)\n"
 msgstr "Errore con le stringhe (%d %s)\n"
 
-#: ../src/socket.c:222
+#: ../src/socket.c:223
 #, c-format
 msgid "Error getting host address (%d %s)\n"
 msgstr "Errore indirizzo host(%d %s)\n"
 
-#: ../src/socket.c:224
+#: ../src/socket.c:225
 msgid "Error getting host address."
 msgstr "Errore indirizzo host."
 
-#: ../src/socket.c:229
+#: ../src/socket.c:230
 msgid "Error creating socket"
 msgstr "Errore nella creazione del socket"
 
-#: ../src/socket.c:240
+#: ../src/socket.c:241
 msgid "Can't retrive wan ip."
 msgstr "Impossibile prelevare l'ip pubblico."
 
-#: ../src/socket.c:261
+#: ../src/socket.c:262
 msgid "Error in connection()"
-msgstr "Errore nella connessione"
+msgstr "Errore nella funzione connect()"
 
-#: ../src/socket.c:289
+#: ../src/socket.c:290
 msgid "Error in connection"
 msgstr "Errore nella connessione"
 
-#: ../src/socket.c:298 ../src/socket.c:301
+#: ../src/socket.c:299 ../src/socket.c:302
 msgid "Error setting socket flags"
 msgstr "Errore con i flag del socket"
 
-#: ../src/socket.c:309
+#: ../src/socket.c:310
 msgid "Error handling strings"
 msgstr "Errore nel gestire le stringhe"
 
-#: ../src/socket.c:313
+#: ../src/socket.c:314
 msgid "Insufficient memory"
 msgstr "Memoria insufficiente"
 
-#: ../src/socket.c:318
+#: ../src/socket.c:319
 #, c-format
 msgid "request ip failed\n"
 msgstr "richiesta di ip fallita\n"
 
-#: ../src/socket.c:320
+#: ../src/socket.c:321
 msgid "Can't find wan ip"
 msgstr "Impossibile trovare l'ip pubblico"
 
-#: ../src/socket.c:328 ../src/socket.c:329
+#: ../src/socket.c:329 ../src/socket.c:330
 msgid "Can't retrive wan ip"
 msgstr "Impossibile prelevare l'ip pubblico"
 
-#: ../src/socket.c:339
+#: ../src/socket.c:340
 msgid "WAN/Public"
 msgstr "WAN/Pubblico"
 
-#: ../src/xml.c:126
+#: ../src/xml.c:148
 #, c-format
 msgid "Can't chdir to home\n"
 msgstr "Impossibile passare alla cartella home.\n"
 
-#: ../src/xml.c:133
+#: ../src/xml.c:155
 #, c-format
 msgid "Can't create configuration file\n"
 msgstr "Impossibile creare il file di configurazione.\n"
 
-#: ../src/xml.c:142
+#: ../src/xml.c:164
 #, c-format
 msgid "Configuration: empty document\n"
 msgstr "Il file di configurazione è vuoto.\n"
 
-#: ../src/xml.c:148
+#: ../src/xml.c:170
 #, c-format
 msgid "Configuration: document of the wrong type, root node != internet_icon\n"
 msgstr "File di configurazione errato, nodo radice scorretto.\n"
+
+#~ msgid "connection %s ok\n"
+#~ msgstr "connessione %s attiva\n"
+
+#~ msgid "not"
+#~ msgstr "non"

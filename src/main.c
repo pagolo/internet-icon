@@ -17,9 +17,6 @@
 #include "main.h"
 #include "mylocale.h"
 
-// status for ip dialog
-static guint status = STATUS_NO_MESSAGE;
-
 // allocate config and set defaults
 Config cfg = { 15, "auto", 53, _ENABLE, _AUTO, "ifconfig.me/ip", "InternetIcon/0.1"};
 
@@ -93,6 +90,11 @@ tray_about (GtkMenuItem * item, gpointer window)
   gtk_widget_destroy (dialog);
 }
 
+static void notify_about (gpointer data)
+{
+  tray_about (NULL, NULL);
+}
+
 static gchar *build_dialog_string (AllIp *MyData)
 {
   IpList *il;
@@ -121,11 +123,6 @@ set_dialog_content (gpointer data)
   AllIp *MyData = (AllIp *) transmit[_MYDATA];
   gchar *content;
 
-  if (status == STATUS_MESSAGE_FIRST) {
-    status = STATUS_MESSAGE;
-    //g_source_remove (tag);
-  }
-  
   if (MyData) {
     get_wan_ip (MyData);
     content = build_dialog_string (MyData);
@@ -152,9 +149,6 @@ show_info (GtkWidget * widget, gpointer window)
   char *content;
   void *transmit[2];
 
-  if (status > STATUS_NO_MESSAGE)
-    return;
-
   MyData = get_lan_ip ();
   if (MyData == NULL)
     return;
@@ -162,7 +156,7 @@ show_info (GtkWidget * widget, gpointer window)
   content = build_dialog_string (MyData);
   
   dialog = gtk_message_dialog_new_with_markup (GTK_WINDOW (window),
-                                               0, //GTK_DIALOG_DESTROY_WITH_PARENT,
+                                               GTK_DIALOG_DESTROY_WITH_PARENT,
                                                GTK_MESSAGE_INFO,
                                                GTK_BUTTONS_NONE,
                                                content);
@@ -178,19 +172,22 @@ show_info (GtkWidget * widget, gpointer window)
 
   g_timeout_add (300, set_dialog_content, transmit);
   
-  status = STATUS_MESSAGE_FIRST;
-
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
-  status = STATUS_NO_MESSAGE;
+}
+
+static void
+show_info_notify (gpointer data)
+{
+  show_info (NULL, NULL);
 }
 
 static GtkStatusIcon *
-create_tray_icon (GtkWidget * menu, GdkPixdata *pdata)
+create_tray_icon (GtkWidget * menu, GdkPixbuf *pdata)
 {
   GtkStatusIcon *tray_icon;
 
-  tray_icon = gtk_status_icon_new_from_pixbuf (gdk_pixbuf_from_pixdata (pdata, TRUE, NULL));
+  tray_icon = gtk_status_icon_new_from_pixbuf (pdata);
   if (tray_icon == NULL) {
     fprintf (stderr, _("Can't create status icon.\n"));
     cfg.status_icon = _DISABLE;
@@ -199,7 +196,7 @@ create_tray_icon (GtkWidget * menu, GdkPixdata *pdata)
   if (gtk_status_icon_is_embedded (tray_icon) && cfg.status_icon == _AUTO) {
     fprintf (stderr, _("Can't view status icon, disabling...\n"));
     cfg.status_icon = _DISABLE;
-    return NULL;
+    return tray_icon;
   }
   if (menu)
     g_signal_connect (G_OBJECT (tray_icon),
@@ -237,41 +234,65 @@ create_menu ()
 static gboolean
 internet_update (gpointer data)
 {
-  GtkStatusIcon **tray_icon = (GtkStatusIcon **)data;
-  GdkPixdata *pdata;
-  gchar *tooltip;
-  gboolean status_icon, notification;
+  Exchange *exchange = (Exchange *)data;
+  GdkPixbuf *pdata;
+  gchar *message;
+  static gboolean internet_on, internet_back = FALSE;
 
-  if (check_internet ()) {
-    pdata = (GdkPixdata *) & my_pixbuf_ok;
-    tooltip = _("Internet connection available");
+  if ((internet_on = check_internet ())) {
+    pdata = gdk_pixbuf_from_pixdata ((GdkPixdata *) & my_pixbuf_ok, TRUE, NULL);
+    message = _("Internet connection available");
   }
   else {
-    pdata = (GdkPixdata *) & my_pixbuf_ko;
-    tooltip = _("No internet connection available");
+    pdata = gdk_pixbuf_from_pixdata ((GdkPixdata *) & my_pixbuf_ko, TRUE, NULL);
+    message = _("No internet connection available");
   }
 
-  if (!(*tray_icon)) {
-    *tray_icon = create_tray_icon (create_menu (), pdata);
-    if (!(*tray_icon))
-      return FALSE;
-  }
-  else {
-    gtk_status_icon_set_from_pixbuf (*tray_icon,
-                                   gdk_pixbuf_from_pixdata (pdata, TRUE,
-                                                            NULL));
+  if (cfg.status_icon != _DISABLE) {
+    if (!(exchange->icon)) {
+      exchange->icon = create_tray_icon (create_menu (), pdata);
+      if (!(exchange->icon))
+        return FALSE;
+    }
+    else {
+      gtk_status_icon_set_from_pixbuf (exchange->icon, pdata);
+    }
+    if (cfg.status_icon == _DISABLE) {
+      gtk_status_icon_set_visible (exchange->icon, FALSE);
+    }
+    else {
+      gtk_status_icon_set_tooltip_text (exchange->icon, message);
+    }
   }
 
-  gtk_status_icon_set_tooltip_text (*tray_icon, tooltip);
-  gtk_status_icon_set_visible (*tray_icon, TRUE);
+  if (cfg.notification != _DISABLE && internet_back != internet_on) {
+    if (!(exchange->notify)) {
+      exchange->notify = notify_notification_new (
+  			"Internet icon",
+      	message,
+  			NULL);
+    }
+    else {
+      notify_notification_update (exchange->notify, "Internet icon", message, NULL);
+    }
+    notify_notification_clear_actions (exchange->notify);
+    notify_notification_add_action (exchange->notify, "info", _("Info"), (NotifyActionCallback) notify_about, NULL, NULL);
+    if (internet_on) {
+      notify_notification_add_action (exchange->notify, "showip", _("Your IP"), (NotifyActionCallback) show_info_notify, NULL, NULL);
+    }
+    notify_notification_set_image_from_pixbuf (exchange->notify, pdata);
+    notify_notification_show (exchange->notify, NULL);
+  }
 
+  internet_back = internet_on;
+  
   return TRUE;
 }
 
 int
 main (int argc, char *argv[])
 {
-  GtkStatusIcon *tray_icon = NULL;
+  Exchange exchange = {NULL, NULL};
 
   setlocale(LC_ALL, getenv("LANG"));
   bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
@@ -284,20 +305,26 @@ main (int argc, char *argv[])
   }
 
   parse_config();
-  if (cfg.status_icon == _DISABLE && cfg.notification == _DISABLE) {
-    printf(_("Nothing to do, exiting...\n"));
-    return (EXIT_SUCCESS);
-  }
+
+  if (!notify_init (PACKAGE))
+		return (EXIT_FAILURE);
 
   res_init();
 
   gtk_init (&argc, &argv);
 
-  internet_update (&tray_icon);
+  internet_update (&exchange);
+  if (cfg.status_icon == _DISABLE && cfg.notification == _DISABLE) {
+    printf(_("Nothing to do, exiting...\n"));
+    notify_uninit();
+    return (EXIT_SUCCESS);
+  }
 
-  g_timeout_add_seconds (cfg.timeout_seconds, internet_update, &tray_icon);
+  g_timeout_add_seconds (cfg.timeout_seconds, internet_update, &exchange);
 
   gtk_main ();
 
+  notify_uninit();
+  
   return EXIT_SUCCESS;
 }

@@ -1,17 +1,13 @@
 
-enum
-{
-  STATUS_NO_MESSAGE,
-  STATUS_MESSAGE_FIRST,
-  STATUS_MESSAGE
-};
+#include <gtk/gtk.h>
+#include <libnotify/notify.h>
 
 enum {
   _DIALOG, _MYDATA
 };
 
 enum {
-  _DISABLE, _ENABLE, _AUTO, _END
+  _DISABLE, _ENABLE, _AUTO, _ENDFLAGS
 };
 
 typedef struct {
@@ -23,3 +19,8 @@ typedef struct {
   char *wanip_page;
   char *user_agent;
 } Config;
+
+typedef struct {
+  GtkStatusIcon *icon;
+  NotifyNotification *notify;
+} Exchange;

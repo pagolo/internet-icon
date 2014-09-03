@@ -573,9 +573,11 @@ xml.o: xml.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/stdlib-bsearch.h /usr/include/bits/stdlib-float.h \
  /usr/include/libxml2/libxml/xlink.h /usr/include/libxml2/libxml/SAX2.h \
  /usr/include/libxml2/libxml/xmlwriter.h mylocale.h /usr/include/locale.h \
- /usr/include/bits/locale.h /usr/include/libintl.h xml.h main.h utils.h \
- /usr/include/string.h /usr/include/bits/string.h \
- /usr/include/bits/string2.h
+ /usr/include/bits/locale.h /usr/include/libintl.h xml.h main.h \
+ /usr/include/libnotify/notify.h /usr/include/libnotify/notification.h \
+ /usr/include/libnotify/notify-enum-types.h \
+ /usr/include/libnotify/notify-features.h utils.h /usr/include/string.h \
+ /usr/include/bits/string.h /usr/include/bits/string2.h
 
 /usr/include/stdc-predef.h:
 
@@ -1892,6 +1894,14 @@ mylocale.h:
 xml.h:
 
 main.h:
+
+/usr/include/libnotify/notify.h:
+
+/usr/include/libnotify/notification.h:
+
+/usr/include/libnotify/notify-enum-types.h:
+
+/usr/include/libnotify/notify-features.h:
 
 utils.h:
 

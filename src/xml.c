@@ -131,7 +131,7 @@ finish:
 
 int get_flag(const char *s) {
   int i;
-  for (i = 0; i < _END; i++)
+  for (i = 0; i < _ENDFLAGS; i++)
     if (strcasecmp (s, flag_value[i]) == 0)
       return i;
   return _DISABLE;

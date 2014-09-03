@@ -96,9 +96,10 @@ tray_about (GtkMenuItem * item, gpointer window)
   gtk_widget_destroy (dialog);
 }
 
-static void notify_about (gpointer data)
+static void notify_about (NotifyNotification *notification, char *action, gpointer user_data)
 {
   tray_about (NULL, NULL);
+  notify_notification_show(notification, NULL);
 }
 
 static gchar *build_dialog_string (AllIp *MyData)
@@ -183,9 +184,10 @@ show_info (GtkWidget * widget, gpointer window)
 }
 
 static void
-show_info_notify (gpointer data)
+show_info_notify (NotifyNotification *notification, char *action, gpointer user_data)
 {
   show_info (NULL, NULL);
+  notify_notification_show(notification, NULL);
 }
 
 static GtkStatusIcon *
@@ -282,9 +284,9 @@ internet_update (gpointer data)
       notify_notification_update (exchange->notify, "Internet icon", message, NULL);
     }
     notify_notification_clear_actions (exchange->notify);
-    notify_notification_add_action (exchange->notify, "info", _("Info"), (NotifyActionCallback) notify_about, NULL, NULL);
+    notify_notification_add_action (exchange->notify, "info", _("Info"), NOTIFY_ACTION_CALLBACK(notify_about), NULL, NULL);
     if (internet_on) {
-      notify_notification_add_action (exchange->notify, "showip", _("Your IP"), (NotifyActionCallback) show_info_notify, NULL, NULL);
+      notify_notification_add_action (exchange->notify, "showip", _("Your IP"), NOTIFY_ACTION_CALLBACK(show_info_notify), NULL, NULL);
     }
     notify_notification_set_image_from_pixbuf (exchange->notify, pdata);
     notify_notification_show (exchange->notify, NULL);

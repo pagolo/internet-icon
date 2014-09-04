@@ -19,7 +19,7 @@ typedef struct {
   char *user_agent;
 } Config;
 
-typedef struct {
+typedef union {
   GtkStatusIcon *icon;
   NotifyNotification *notify;
 } Exchange;

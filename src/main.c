@@ -70,12 +70,20 @@ tray_exit (GtkMenuItem * item, gpointer user_data)
 }
 
 static void
-tray_about (GtkMenuItem * item, gpointer window)
+tray_about (GtkMenuItem * item, gpointer user_data)
 {
-  GdkPixbuf *pixbuf = gdk_pixbuf_from_pixdata (&my_pixbuf_ok, TRUE, NULL);
+  gboolean internet_on = TRUE;
+  if (user_data) {
+      internet_on =  *((gboolean *)user_data);
+  }
+  GdkPixbuf *pixbuf = gdk_pixbuf_from_pixdata (internet_on? &my_pixbuf_ok : &my_pixbuf_ko, TRUE, NULL);
   if (!(pixbuf)) {
     fprintf (stderr, _("Get pixbuf error...\n"));
     return;
+  }
+  GdkPixbuf *pixbuf2 = pixbuf;
+  if (internet_on == FALSE) {
+    pixbuf2 = gdk_pixbuf_from_pixdata (&my_pixbuf_ok, TRUE, NULL);
   }
   GtkWidget *dialog = gtk_about_dialog_new ();
   if (!(dialog)) {
@@ -90,16 +98,19 @@ tray_about (GtkMenuItem * item, gpointer window)
                                  _("InternetIcon is a simple tool that shows your internet status."));
   gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), 
                                "https://github.com/pagolo/internet-icon");
-  gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG (dialog), pixbuf);
+  gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG (dialog), pixbuf2);
   gtk_window_set_icon (GTK_WINDOW(dialog), pixbuf);
-  g_object_unref (pixbuf), pixbuf = NULL;
+  if (pixbuf2 != pixbuf) {
+    g_object_unref (pixbuf2);
+  }
+  g_object_unref (pixbuf), pixbuf = pixbuf2 = NULL;
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
 }
 
 static void notify_about (NotifyNotification *notification, char *action, gpointer user_data)
 {
-  tray_about (NULL, NULL);
+  tray_about (NULL, user_data);
   notify_notification_show(notification, NULL);
 }
 
@@ -254,7 +265,8 @@ internet_update (gpointer data)
   Exchange *exchange = (Exchange *)data;
   GdkPixbuf *pdata;
   gchar *message;
-  static gboolean internet_on, internet_back = FALSE;
+  static gboolean internet_on = FALSE;
+  static int internet_back = -1;
 
   if ((internet_on = check_internet ())) {
     pdata = gdk_pixbuf_from_pixdata ((GdkPixdata *) & my_pixbuf_ok, TRUE, NULL);
@@ -265,18 +277,22 @@ internet_update (gpointer data)
     message = _("No internet connection available");
   }
 
-  if (cfg.op_mode == _NOTIFY && internet_back != internet_on) {
+  if ((cfg.op_mode == _NOTIFY || cfg.op_mode == _AUTO) && internet_back != internet_on) {
     if (!(exchange->notify)) {
       exchange->notify = notify_notification_new (
   			"Internet status",
       	message,
   			NULL);
+      if (cfg.op_mode == _AUTO && exchange->notify == NULL) {
+        cfg.op_mode = _ICON;
+        goto handle_icon;
+      }
     }
     else {
       notify_notification_update (exchange->notify, "Internet status", message, NULL);
     }
     notify_notification_clear_actions (exchange->notify);
-    notify_notification_add_action (exchange->notify, "info", _("Info"), NOTIFY_ACTION_CALLBACK(notify_about), NULL, NULL);
+    notify_notification_add_action (exchange->notify, "info", _("Info"), NOTIFY_ACTION_CALLBACK(notify_about), &internet_on, NULL);
     if (internet_on) {
       notify_notification_add_action (exchange->notify, "showip", _("Your IP"), NOTIFY_ACTION_CALLBACK(show_info_notify), NULL, NULL);
     }
@@ -284,6 +300,7 @@ internet_update (gpointer data)
     notify_notification_show (exchange->notify, NULL);
   }
 
+handle_icon:
   if (cfg.op_mode == _ICON) {
     if (!(exchange->icon)) {
       exchange->icon = create_tray_icon (create_menu (), pdata);
@@ -313,7 +330,7 @@ internet_update (gpointer data)
 int
 main (int argc, char *argv[])
 {
-  Exchange exchange = {NULL, NULL};
+  Exchange exchange = {NULL};
 
   setlocale(LC_ALL, getenv("LANG"));
   bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);

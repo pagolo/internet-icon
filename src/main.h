@@ -7,15 +7,14 @@ enum {
 };
 
 enum {
-  _DISABLE, _ENABLE, _AUTO, _ENDFLAGS
+  _NOTIFY, _ICON, _AUTO, _ENDFLAGS
 };
 
 typedef struct {
   int   timeout_seconds;
   char *test_ip;
   int   test_port;
-  int   status_icon;
-  int   notification;
+  int   op_mode;
   char *wanip_page;
   char *user_agent;
 } Config;

@@ -14,11 +14,11 @@
 
 extern Config cfg;
 
-static char *flag_value[] = {"no", "yes", "auto"};
+static char *flag_value[] = {"notification", "status-icon", "auto"};
 
 int write_config(void) {
   int rc, result = 0;
-  char *config_name = ".internet_icon.conf";
+  char *config_name = ".internet_icon";
   xmlTextWriterPtr writer;
 #ifdef MEMORY
   int fd;
@@ -76,14 +76,8 @@ int write_config(void) {
   // newline
   rc = xmlTextWriterWriteString(writer, BAD_CAST "\n  ");
   if (rc < 0) goto finish;
-  // status icon use
-  rc = xmlTextWriterWriteElement(writer, BAD_CAST "status_icon", BAD_CAST flag_value[cfg.status_icon]);
-  if (rc < 0) goto finish;
-  // newline
-  rc = xmlTextWriterWriteString(writer, BAD_CAST "\n  ");
-  if (rc < 0) goto finish;
-  // notification use
-  rc = xmlTextWriterWriteElement(writer, BAD_CAST "notification", BAD_CAST flag_value[cfg.notification]);
+  // operating mode
+  rc = xmlTextWriterWriteElement(writer, BAD_CAST "opmode", BAD_CAST flag_value[cfg.op_mode]);
   if (rc < 0) goto finish;
   // newline
   rc = xmlTextWriterWriteString(writer, BAD_CAST "\n  ");
@@ -134,7 +128,7 @@ int get_flag(const char *s) {
   for (i = 0; i < _ENDFLAGS; i++)
     if (strcasecmp (s, flag_value[i]) == 0)
       return i;
-  return _DISABLE;
+  return _AUTO;
 }
 
 void
@@ -149,7 +143,7 @@ parse_config(void) {
     return;
   }
 
-  doc = xmlParseFile(".internet_icon.conf");
+  doc = xmlParseFile(".internet_icon");
   if (doc == NULL) {
     if (!(write_config())) {
       fprintf(stderr, _("Can't create configuration file\n"));
@@ -195,16 +189,10 @@ parse_config(void) {
           cfg.test_port = 80;
       }
     }
-    if ((!xmlStrcmp(cur->name, (const xmlChar *) "status_icon"))) {
+    if ((!xmlStrcmp(cur->name, (const xmlChar *) "opmode"))) {
       xmlChar *key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
       if (key && *key) {
-        cfg.status_icon = get_flag((const char *)key);
-      }
-    }
-    if ((!xmlStrcmp(cur->name, (const xmlChar *) "notification"))) {
-      xmlChar *key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
-      if (key && *key) {
-        cfg.notification = get_flag((const char *)key);
+        cfg.op_mode = get_flag((const char *)key);
       }
     }
     if ((!xmlStrcmp(cur->name, (const xmlChar *) "wan_ip_page"))) {

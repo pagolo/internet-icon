@@ -8,7 +8,7 @@ Run in terminal=2
 Working directories=../../../internet-icon
 
 [File Loader]
-Files=../../src/socket.c#359%%%../../src/main.c#313%%%../../src/pixbufs.c#5%%%../../src/utils.c#1%%%../../src/xml.c#209%%%../../src/main.h#18
+Files=../../src/socket.c#233%%%../../src/main.c#296%%%../../src/pixbufs.c#5%%%../../src/utils.c#1%%%../../src/xml.c#217%%%../../src/main.h#1
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n

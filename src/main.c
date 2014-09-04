@@ -18,7 +18,7 @@
 #include "mylocale.h"
 
 // allocate config and set defaults
-Config cfg = { 15, "auto", 53, _DISABLE, _ENABLE, "ifconfig.me/ip", "InternetIcon/Getting wan ip"};
+Config cfg = { 15, "auto", 53, _NOTIFY, "ifconfig.me/ip", "InternetIcon/Getting wan ip"};
 
 // internet icons
 extern const GdkPixdata my_pixbuf_ok;
@@ -207,12 +207,12 @@ create_tray_icon (GtkWidget * menu, GdkPixbuf *pdata)
   tray_icon = gtk_status_icon_new_from_pixbuf (pdata);
   if (tray_icon == NULL) {
     fprintf (stderr, _("Can't create status icon.\n"));
-    cfg.status_icon = _DISABLE;
+    cfg.op_mode = -1;
     return NULL;
   }
-  if (gtk_status_icon_is_embedded (tray_icon) && cfg.status_icon == _AUTO) {
+  if (gtk_status_icon_is_embedded (tray_icon) && cfg.op_mode == _AUTO) {
     fprintf (stderr, _("Can't view status icon, disabling...\n"));
-    cfg.status_icon = _DISABLE;
+    cfg.op_mode = -1;
     return tray_icon;
   }
   if (menu)
@@ -265,7 +265,7 @@ internet_update (gpointer data)
     message = _("No internet connection available");
   }
 
-  if (cfg.notification != _DISABLE && internet_back != internet_on) {
+  if (cfg.op_mode == _NOTIFY && internet_back != internet_on) {
     if (!(exchange->notify)) {
       exchange->notify = notify_notification_new (
   			"Internet status",
@@ -284,7 +284,7 @@ internet_update (gpointer data)
     notify_notification_show (exchange->notify, NULL);
   }
 
-  if (cfg.status_icon != _DISABLE) {
+  if (cfg.op_mode == _ICON) {
     if (!(exchange->icon)) {
       exchange->icon = create_tray_icon (create_menu (), pdata);
       if (!(exchange->icon))
@@ -293,7 +293,7 @@ internet_update (gpointer data)
     else {
       gtk_status_icon_set_from_pixbuf (exchange->icon, pdata);
     }
-    if (cfg.status_icon == _DISABLE) {
+    if (cfg.op_mode == -1) {
       gtk_status_icon_set_visible (exchange->icon, FALSE);
     }
     else {
@@ -336,7 +336,7 @@ main (int argc, char *argv[])
   gtk_init (&argc, &argv);
 
   internet_update (&exchange);
-  if (cfg.status_icon == _DISABLE && cfg.notification == _DISABLE) {
+  if (cfg.op_mode < 0) {
     printf(_("Nothing to do, exiting...\n"));
     notify_uninit();
     return (EXIT_SUCCESS);

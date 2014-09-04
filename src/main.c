@@ -18,7 +18,7 @@
 #include "mylocale.h"
 
 // allocate config and set defaults
-Config cfg = { 15, "auto", 53, _ENABLE, _AUTO, "ifconfig.me/ip", "InternetIcon/Get wan ip"};
+Config cfg = { 15, "auto", 53, _DISABLE, _ENABLE, "ifconfig.me/ip", "InternetIcon/Getting wan ip"};
 
 // internet icons
 extern const GdkPixdata my_pixbuf_ok;
@@ -91,6 +91,7 @@ tray_about (GtkMenuItem * item, gpointer window)
   gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(dialog), 
                                "https://github.com/pagolo/internet-icon");
   gtk_about_dialog_set_logo (GTK_ABOUT_DIALOG (dialog), pixbuf);
+  gtk_window_set_icon (GTK_WINDOW(dialog), pixbuf);
   g_object_unref (pixbuf), pixbuf = NULL;
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
@@ -155,6 +156,12 @@ show_info (GtkWidget * widget, gpointer window)
   AllIp *MyData;
   char *content;
   void *transmit[2];
+  GdkPixbuf *pixbuf = gdk_pixbuf_from_pixdata (&my_pixbuf_ok, TRUE, NULL);
+
+  if (!(pixbuf)) {
+    fprintf (stderr, _("Get pixbuf error...\n"));
+    return;
+  }
 
   MyData = get_lan_ip ();
   if (MyData == NULL)
@@ -174,8 +181,10 @@ show_info (GtkWidget * widget, gpointer window)
     return;
   }
   gtk_window_set_title (GTK_WINDOW (dialog), _("Your ip addresses"));
+  gtk_window_set_icon (GTK_WINDOW(dialog), pixbuf);
   transmit[_DIALOG] = (void *)dialog;
   transmit[_MYDATA] = (void *)MyData;
+  g_object_unref (pixbuf), pixbuf = NULL;
 
   g_timeout_add (300, set_dialog_content, transmit);
   
@@ -256,6 +265,25 @@ internet_update (gpointer data)
     message = _("No internet connection available");
   }
 
+  if (cfg.notification != _DISABLE && internet_back != internet_on) {
+    if (!(exchange->notify)) {
+      exchange->notify = notify_notification_new (
+  			"Internet status",
+      	message,
+  			NULL);
+    }
+    else {
+      notify_notification_update (exchange->notify, "Internet status", message, NULL);
+    }
+    notify_notification_clear_actions (exchange->notify);
+    notify_notification_add_action (exchange->notify, "info", _("Info"), NOTIFY_ACTION_CALLBACK(notify_about), NULL, NULL);
+    if (internet_on) {
+      notify_notification_add_action (exchange->notify, "showip", _("Your IP"), NOTIFY_ACTION_CALLBACK(show_info_notify), NULL, NULL);
+    }
+    notify_notification_set_image_from_pixbuf (exchange->notify, pdata);
+    notify_notification_show (exchange->notify, NULL);
+  }
+
   if (cfg.status_icon != _DISABLE) {
     if (!(exchange->icon)) {
       exchange->icon = create_tray_icon (create_menu (), pdata);
@@ -270,27 +298,12 @@ internet_update (gpointer data)
     }
     else {
       gtk_status_icon_set_tooltip_text (exchange->icon, message);
+      gtk_status_icon_set_visible (exchange->icon, TRUE);
     }
   }
 
-  if (cfg.notification != _DISABLE && internet_back != internet_on) {
-    if (!(exchange->notify)) {
-      exchange->notify = notify_notification_new (
-  			"Internet icon",
-      	message,
-  			NULL);
-    }
-    else {
-      notify_notification_update (exchange->notify, "Internet icon", message, NULL);
-    }
-    notify_notification_clear_actions (exchange->notify);
-    notify_notification_add_action (exchange->notify, "info", _("Info"), NOTIFY_ACTION_CALLBACK(notify_about), NULL, NULL);
-    if (internet_on) {
-      notify_notification_add_action (exchange->notify, "showip", _("Your IP"), NOTIFY_ACTION_CALLBACK(show_info_notify), NULL, NULL);
-    }
-    notify_notification_set_image_from_pixbuf (exchange->notify, pdata);
-    notify_notification_show (exchange->notify, NULL);
-  }
+
+  g_object_unref (pdata), pdata = NULL;
 
   internet_back = internet_on;
   
@@ -311,6 +324,7 @@ main (int argc, char *argv[])
     printf (_("Program is already active for this user.\n"));
     return (EXIT_FAILURE);
   }
+
 
   parse_config();
 

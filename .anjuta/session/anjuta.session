@@ -3,7 +3,7 @@ Maximized=1
 Geometry=1280x734+0+27
 
 [File Loader]
-Files=../../src/socket.c#233%%%../../src/main.c#252%%%../../src/pixbufs.c#5%%%../../src/utils.c#1%%%../../src/xml.c#217%%%../../src/main.h#22
+Files=../../src/socket.c#38%%%../../src/main.c#348%%%../../src/pixbufs.c#5%%%../../src/utils.c#1%%%../../src/xml.c#217%%%../../src/main.h#15
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
@@ -21,6 +21,9 @@ Working directories=../../../internet-icon
 Shortcut=internet-icon//src//internet_icon
 Expand=internet-icon%%%internet-icon//src%%%internet-icon//src//internet_icon
 
+[Debugger]
+Stop at beginning=2
+
 [Build]
 Configuration list=1:Default:%%%1:Debug:Debug%%%1:Profiling:Profiling%%%1:Optimized:Optimized%%%1:MinGW32:MinGW32
 Selected Configuration=Default
@@ -29,6 +32,3 @@ BuildArgs/Debug=--enable-maintainer-mode 'CFLAGS=-g -O0' 'CXXFLAGS=-g -O0' 'JFLA
 BuildArgs/Profiling=--enable-maintainer-mode 'CFLAGS=-g -pg' 'CXXFLAGS=-g -pg' 'JFLAGS=-g -pg' 'FFLAGS=-g -pg'
 BuildArgs/Optimized=--enable-maintainer-mode 'CFLAGS=-O2' 'CXXFLAGS=-O2' 'JFLAGS=-O2' 'FFLAGS=-O2'
 BuildArgs/MinGW32=
-
-[Debugger]
-Stop at beginning=2

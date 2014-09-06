@@ -5,6 +5,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include <config.h>
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
@@ -18,7 +19,7 @@
 #include "mylocale.h"
 
 // allocate config and set defaults
-Config cfg = { 15, "auto", 53, _NOTIFY, "ifconfig.me/ip", "InternetIcon/Getting wan ip"};
+Config cfg = { 15, "auto", 53, _AUTO, "ifconfig.me/ip", "InternetIcon/Getting wan ip"};
 
 // internet icons
 extern const GdkPixdata my_pixbuf_ok;
@@ -43,14 +44,8 @@ check_internet (void)
     return (gboolean) test_connection (inet_addr (cfg.test_ip), cfg.test_port);
   }
 	for (i = 0; i < MAXNS; i++) {
-    char *ip = inet_ntoa(_res.nsaddr_list[i].sin_addr);
-    if (
-         strstr(ip, "255.") == ip ||
-         strstr(ip, "0.") == ip ||
-         strstr(ip, "127.") == ip ||
-         strstr(ip, "10.") == ip ||
-         strstr(ip, "192.168.") == ip
-       )
+    unsigned char *ip = (unsigned char *)&(_res.nsaddr_list[i].sin_addr.s_addr);
+    if (is_local_address (ip))
       continue;
     if (test_connection (_res.nsaddr_list[i].sin_addr.s_addr, cfg.test_port))
       return TRUE;
@@ -197,7 +192,7 @@ show_info (GtkWidget * widget, gpointer window)
   transmit[_MYDATA] = (void *)MyData;
   g_object_unref (pixbuf), pixbuf = NULL;
 
-  g_timeout_add (300, set_dialog_content, transmit);
+  g_timeout_add (500, set_dialog_content, transmit);
   
   gtk_dialog_run (GTK_DIALOG (dialog));
   gtk_widget_destroy (dialog);
@@ -327,6 +322,38 @@ handle_icon:
   return TRUE;
 }
 
+OpMode
+guess_op_mode (void)
+{
+  int i = 0;
+  MyDesktop desktop[] = {
+    {"gnome", _NOTIFY},
+    {"kde", _ICON},
+    {"ubuntu", _NOTIFY},
+    {"mint", _ICON},
+    {"icewm", -1},
+    {"twm", -1},
+    {NULL, _AUTO}
+  };
+  char *desktop_session = getenv("DESKTOP_SESSION");
+
+  if (!(desktop_session)) return _AUTO;
+
+  if (strcmp(desktop_session, "default") == 0) {
+    char *manager = getenv("SESSION_MANAGER");
+    if (manager) desktop_session = manager;
+  }
+
+  while (TRUE) {
+    if (desktop[i].desktop == NULL ||
+        strstr(desktop_session, desktop[i].desktop))
+      return desktop[i].op_mode;
+    i++;
+  }
+  // unreachable code;
+  return _AUTO;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -342,9 +369,12 @@ main (int argc, char *argv[])
     return (EXIT_FAILURE);
   }
 
-
   parse_config();
 
+  if (cfg.op_mode == _AUTO) {
+    cfg.op_mode = guess_op_mode();
+  }
+  
   if (!notify_init (PACKAGE))
 		return (EXIT_FAILURE);
 
@@ -352,7 +382,10 @@ main (int argc, char *argv[])
 
   gtk_init (&argc, &argv);
 
-  internet_update (&exchange);
+  if (cfg.op_mode >= 0) {
+    internet_update (&exchange);
+  }
+  
   if (cfg.op_mode < 0) {
     printf(_("Nothing to do, exiting...\n"));
     notify_uninit();

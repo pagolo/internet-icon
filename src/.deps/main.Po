@@ -7,7 +7,11 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/stdarg.h \
  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
- /usr/include/bits/stdio.h ../config.h /usr/include/gtk-3.0/gtk/gtk.h \
+ /usr/include/bits/stdio.h /usr/include/string.h /usr/include/xlocale.h \
+ /usr/include/bits/string.h /usr/include/bits/string2.h \
+ /usr/include/endian.h /usr/include/bits/endian.h \
+ /usr/include/bits/byteswap.h /usr/include/bits/byteswap-16.h \
+ /usr/include/stdlib.h ../config.h /usr/include/gtk-3.0/gtk/gtk.h \
  /usr/include/gtk-3.0/gdk/gdk.h /usr/include/gtk-3.0/gdk/gdkconfig.h \
  /usr/include/glib-2.0/glib.h /usr/include/glib-2.0/glib/galloca.h \
  /usr/include/glib-2.0/glib/gtypes.h \
@@ -20,8 +24,7 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/bits/posix2_lim.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/float.h \
  /usr/include/glib-2.0/glib/gversionmacros.h /usr/include/time.h \
- /usr/include/bits/time.h /usr/include/xlocale.h \
- /usr/include/glib-2.0/glib/garray.h \
+ /usr/include/bits/time.h /usr/include/glib-2.0/glib/garray.h \
  /usr/include/glib-2.0/glib/gasyncqueue.h \
  /usr/include/glib-2.0/glib/gthread.h \
  /usr/include/glib-2.0/glib/gatomic.h /usr/include/glib-2.0/glib/gerror.h \
@@ -85,8 +88,6 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/glib-2.0/glib/deprecated/gmain.h \
  /usr/include/glib-2.0/glib/deprecated/grel.h \
  /usr/include/glib-2.0/glib/deprecated/gthread.h /usr/include/pthread.h \
- /usr/include/endian.h /usr/include/bits/endian.h \
- /usr/include/bits/byteswap.h /usr/include/bits/byteswap-16.h \
  /usr/include/sched.h /usr/include/bits/sched.h \
  /usr/include/bits/setjmp.h /usr/include/gtk-3.0/gdk/gdkversionmacros.h \
  /usr/include/gtk-3.0/gdk/gdkapplaunchcontext.h \
@@ -554,12 +555,11 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
  /usr/include/gdk-pixbuf-2.0/gdk-pixbuf/gdk-pixdata.h \
  /usr/include/libnotify/notify.h /usr/include/libnotify/notification.h \
  /usr/include/libnotify/notify-enum-types.h \
- /usr/include/libnotify/notify-features.h socket.h /usr/include/stdlib.h \
+ /usr/include/libnotify/notify-features.h socket.h \
  /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
  /usr/include/alloca.h /usr/include/bits/stdlib-bsearch.h \
- /usr/include/bits/stdlib-float.h /usr/include/string.h \
- /usr/include/bits/string.h /usr/include/bits/string2.h \
- /usr/include/netdb.h /usr/include/netinet/in.h \
+ /usr/include/bits/stdlib-float.h /usr/include/netdb.h \
+ /usr/include/netinet/in.h \
  /usr/lib/gcc/x86_64-redhat-linux/4.8.3/include/stdint.h \
  /usr/include/stdint.h /usr/include/bits/wchar.h \
  /usr/include/sys/socket.h /usr/include/sys/uio.h /usr/include/bits/uio.h \
@@ -617,6 +617,24 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 
 /usr/include/bits/stdio.h:
 
+/usr/include/string.h:
+
+/usr/include/xlocale.h:
+
+/usr/include/bits/string.h:
+
+/usr/include/bits/string2.h:
+
+/usr/include/endian.h:
+
+/usr/include/bits/endian.h:
+
+/usr/include/bits/byteswap.h:
+
+/usr/include/bits/byteswap-16.h:
+
+/usr/include/stdlib.h:
+
 ../config.h:
 
 /usr/include/gtk-3.0/gtk/gtk.h:
@@ -656,8 +674,6 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 /usr/include/time.h:
 
 /usr/include/bits/time.h:
-
-/usr/include/xlocale.h:
 
 /usr/include/glib-2.0/glib/garray.h:
 
@@ -824,14 +840,6 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 /usr/include/glib-2.0/glib/deprecated/gthread.h:
 
 /usr/include/pthread.h:
-
-/usr/include/endian.h:
-
-/usr/include/bits/endian.h:
-
-/usr/include/bits/byteswap.h:
-
-/usr/include/bits/byteswap-16.h:
 
 /usr/include/sched.h:
 
@@ -1833,8 +1841,6 @@ main.o: main.c /usr/include/stdc-predef.h /usr/include/stdio.h \
 
 socket.h:
 
-/usr/include/stdlib.h:
-
 /usr/include/bits/waitflags.h:
 
 /usr/include/bits/waitstatus.h:
@@ -1844,12 +1850,6 @@ socket.h:
 /usr/include/bits/stdlib-bsearch.h:
 
 /usr/include/bits/stdlib-float.h:
-
-/usr/include/string.h:
-
-/usr/include/bits/string.h:
-
-/usr/include/bits/string2.h:
 
 /usr/include/netdb.h:
 

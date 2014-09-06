@@ -8,13 +8,17 @@ mysprintf (const char *format, ...)
   int buflen;
   va_list argptr;
 
+  if (buf == NULL) return NULL;
+
   va_start (argptr, format);
   buflen = vsnprintf (buf, 4, format, argptr);
   free (buf);
   va_end (argptr);
   
-  va_start (argptr, format);
   buf = calloc (1, ++buflen);
+  if (buf == NULL) return NULL;
+
+  va_start (argptr, format);
   vsnprintf (buf, buflen, format, argptr);
   va_end (argptr);
     return buf;

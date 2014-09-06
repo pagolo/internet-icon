@@ -2,8 +2,13 @@
 Maximized=1
 Geometry=1280x734+0+27
 
+[Execution]
+Program uri=../../src/internet_icon
+Run in terminal=2
+Working directories=../../../internet-icon
+
 [File Loader]
-Files=../../src/socket.c#38%%%../../src/main.c#348%%%../../src/pixbufs.c#5%%%../../src/utils.c#1%%%../../src/xml.c#217%%%../../src/main.h#15
+Files=../../src/socket.c#31%%%../../src/main.c#48%%%../../src/pixbufs.c#5%%%../../src/utils.c#24%%%../../src/xml.c#217%%%../../src/main.h#15%%%../../src/socket.h#29%%%../../src/utils.h#11
 
 [Document Manager]
 bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
@@ -11,11 +16,6 @@ bookmarks=<?xml version="1.0" encoding="UTF-8"?>\n<bookmarks/>\n
 [Search Box]
 Case Sensitive=1
 Highlight Match=1
-
-[Execution]
-Program uri=../../src/internet_icon
-Run in terminal=2
-Working directories=../../../internet-icon
 
 [Project Manager]
 Shortcut=internet-icon//src//internet_icon

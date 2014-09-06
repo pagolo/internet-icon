@@ -1,0 +1,196 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-09-06 09:52+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../src/main.c:82 ../src/main.c:174
+#, c-format
+msgid "Get pixbuf error...\n"
+msgstr ""
+
+#: ../src/main.c:91
+#, c-format
+msgid "Can't create dialog...\n"
+msgstr ""
+
+#: ../src/main.c:99
+msgid "InternetIcon is a simple tool that shows your internet status."
+msgstr ""
+
+#: ../src/main.c:151
+msgid "Close"
+msgstr ""
+
+#: ../src/main.c:195
+msgid "Your ip addresses"
+msgstr ""
+
+#: ../src/main.c:221
+#, c-format
+msgid "Can't create status icon.\n"
+msgstr ""
+
+#: ../src/main.c:226
+#, c-format
+msgid "Can't view status icon, disabling...\n"
+msgstr ""
+
+#: ../src/main.c:245 ../src/main.c:298
+msgid "Your IP"
+msgstr ""
+
+#: ../src/main.c:246
+msgid "About"
+msgstr ""
+
+#: ../src/main.c:247
+msgid "Exit"
+msgstr ""
+
+#: ../src/main.c:274
+msgid "Internet connection available"
+msgstr ""
+
+#: ../src/main.c:278
+msgid "No internet connection available"
+msgstr ""
+
+#: ../src/main.c:296
+msgid "Info"
+msgstr ""
+
+#: ../src/main.c:374
+#, c-format
+msgid "Program is already active for this user.\n"
+msgstr ""
+
+#: ../src/main.c:396
+#, c-format
+msgid "Nothing to do, exiting...\n"
+msgstr ""
+
+#: ../src/findtask.c:56
+#, c-format
+msgid "Process %s, userid %s\n"
+msgstr ""
+
+#: ../src/socket.c:49
+#, c-format
+msgid "Error creating socket\n"
+msgstr ""
+
+#: ../src/socket.c:70
+#, c-format
+msgid "Error in connection %d - %s\n"
+msgstr ""
+
+#: ../src/socket.c:77
+#, c-format
+msgid "Timeout reached.\n"
+msgstr ""
+
+#: ../src/socket.c:83
+#, c-format
+msgid "Error calling connect() %d - %s\n"
+msgstr ""
+
+#: ../src/socket.c:142
+msgid "Waiting for wan ip..."
+msgstr ""
+
+#: ../src/socket.c:167
+msgid "device"
+msgstr ""
+
+#: ../src/socket.c:215
+#, c-format
+msgid "Error hadling strings (%d %s)\n"
+msgstr ""
+
+#: ../src/socket.c:223
+#, c-format
+msgid "Error getting host address (%d %s)\n"
+msgstr ""
+
+#: ../src/socket.c:225
+msgid "Error getting host address."
+msgstr ""
+
+#: ../src/socket.c:230
+msgid "Error creating socket"
+msgstr ""
+
+#: ../src/socket.c:241
+msgid "Can't retrive wan ip."
+msgstr ""
+
+#: ../src/socket.c:262
+msgid "Error in connection()"
+msgstr ""
+
+#: ../src/socket.c:290
+msgid "Error in connection"
+msgstr ""
+
+#: ../src/socket.c:299 ../src/socket.c:302
+msgid "Error setting socket flags"
+msgstr ""
+
+#: ../src/socket.c:310
+msgid "Error handling strings"
+msgstr ""
+
+#: ../src/socket.c:314
+msgid "Insufficient memory"
+msgstr ""
+
+#: ../src/socket.c:319
+#, c-format
+msgid "request ip failed\n"
+msgstr ""
+
+#: ../src/socket.c:321
+msgid "Can't find wan ip"
+msgstr ""
+
+#: ../src/socket.c:329 ../src/socket.c:330
+msgid "Can't retrive wan ip"
+msgstr ""
+
+#: ../src/socket.c:340
+msgid "WAN/Public"
+msgstr ""
+
+#: ../src/xml.c:142
+#, c-format
+msgid "Can't chdir to home\n"
+msgstr ""
+
+#: ../src/xml.c:149
+#, c-format
+msgid "Can't create configuration file\n"
+msgstr ""
+
+#: ../src/xml.c:158
+#, c-format
+msgid "Configuration: empty document\n"
+msgstr ""
+
+#: ../src/xml.c:164
+#, c-format
+msgid "Configuration: document of the wrong type, root node != internet_icon\n"
+msgstr ""

@@ -45,7 +45,7 @@ check_internet (void)
   }
 	for (i = 0; i < MAXNS; i++) {
     unsigned char *ip = (unsigned char *)&(_res.nsaddr_list[i].sin_addr.s_addr);
-    if (is_local_address (ip))
+    if (is_local_address (ip) || *ip == 0)
       continue;
     if (test_connection (_res.nsaddr_list[i].sin_addr.s_addr, cfg.test_port))
       return TRUE;

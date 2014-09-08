@@ -19,7 +19,7 @@
 
 GETTEXT_PACKAGE = internet_icon
 PACKAGE = interneticon
-VERSION = 1.0
+VERSION = 1.1
 
 SHELL = /bin/sh
 

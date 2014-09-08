@@ -339,7 +339,7 @@ guess_op_mode (void)
 
   if (!(desktop_session)) return _AUTO;
 
-  if (strcmp(desktop_session, "default") == 0) {
+  if (strncmp(desktop_session, "default", 7) == 0) {
     char *manager = getenv("SESSION_MANAGER");
     if (manager) desktop_session = manager;
   }

@@ -39,7 +39,7 @@
           <item name="AnjutaDebuggerBreakpoints" orientation="vertical" locked="no" iconified="no" closed="yes"/>
           <item name="AnjutaTerminal" orientation="vertical" locked="no" iconified="no" closed="no"/>
           <item name="search_files" orientation="vertical" locked="no" iconified="no" closed="yes"/>
-          <item name="AnjutaMessageView" orientation="vertical" locked="no" iconified="no" closed="yes"/>
+          <item name="AnjutaMessageView" orientation="vertical" locked="no" iconified="no" closed="no"/>
         </notebook>
       </paned>
     </dock>

@@ -1,0 +1,61 @@
+
+INTERNET ICON v. 1.1
+--------------------
+  Internet icon is a small desktop application that notifies the user about his internet connection.
+  The application displays a tray icon or shows a notification message, depending on the desktop
+  environment or the user's choice.
+
+INSTALLATION
+------------
+  Compile and install the application as usual. Download the package from github, this link:
+  https://github.com/pagolo/internet-icon/archive/v.1.1.tar.gz
+  unpack the archive and enter the folder internet-icon-v.1.1
+  then execute these commands:
+  ./configure
+  make
+  sudo make install
+  For details see the INSTALL file.
+
+CONFIGURATION
+-------------
+  The first time is launched, the application creates an xml configuration file in the home folder,
+  named ".internet_icon".
+  Normally you can leave it unmodified, in any case you can modify it by hand. Please restart the
+  application if you modify the configuration.
+  Tags explanation
+  ----------------
+  <timeout> default value: 15. Number of seconds between each internet connection check out.
+            minimum value: 10.
+  <test_ip> and <test_port> default values: "auto" and 53. Ip address and port to be checked.
+            Please use ip address, not domain name! "auto" indicates your dns servers ip.
+  <opmode>  default value: "auto". The operational mode, i.e. "status_icon", "notification",
+            or "auto"; "status_icon" displays an icon on the system tray (make sure it is visible),
+            "notification" shows a message when the internet status changes, "auto" displays icon
+            or notification based on program's choice.
+  <wan_ip_page> default value: "ifconfig.me/ip". The url to automatically get your wan ip.
+  <user_agent>  default value: "InternetIcon/Getting wan ip". The user agent, as required by the
+            "what is my ip" server.
+
+AUTO STARTING
+-------------
+  You can automatically start the application when desktop session starts, both in Gnome and Kde.
+  Using Gnome run "gnome-session-properties", then add a startup application, specifying full path
+  of the executable code (typically /usr/local/bin/internet_icon).
+  Using Kde create a symbolic link from the same path to .kde/Autostart folder:
+  ln -s /usr/local/bin/internet_icon .kde/Autostart
+
+TRANSLATION
+  By default, only italian translation is present. If you create a translation for your language,
+  please let me know, so I can add your translation to the archive.
+  To generate catalog file, follow these steps:
+  cd <project folder>
+  cd po
+  make internet_icon.pot
+
+CONTACT
+-------
+  Author: P. Bozzo
+  Email:  pagolo DOT bozzo AT gmail DOT com
+
+
+

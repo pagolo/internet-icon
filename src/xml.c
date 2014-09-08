@@ -171,8 +171,8 @@ parse_config(void) {
       xmlChar *key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
       if (key && *key) {
         cfg.timeout_seconds = atoi((const char *)key);
-        if (cfg.timeout_seconds < 5)
-          cfg.timeout_seconds = 5;
+        if (cfg.timeout_seconds < 10)
+          cfg.timeout_seconds = 10;
       }
     }
     if ((!xmlStrcmp(cur->name, (const xmlChar *) "test_ip"))) {

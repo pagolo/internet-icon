@@ -19,7 +19,7 @@
 #include "mylocale.h"
 
 // allocate config and set defaults
-Config cfg = { 15, "auto", 53, _AUTO, "ifconfig.me/ip", "InternetIcon/Getting wan ip"};
+Config cfg = { 20, "auto", 53, _AUTO, "ifconfig.me/ip", "InternetIcon/Getting wan ip"};
 
 // internet icons
 extern const GdkPixdata my_pixbuf_ok;

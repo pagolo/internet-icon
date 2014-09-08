@@ -24,7 +24,7 @@ CONFIGURATION
   application if you modify the configuration.
   Tags explanation
   ----------------
-  <timeout> default value: 15. Number of seconds between each internet connection check out.
+  <timeout> default value: 20. Number of seconds between each internet connection check out.
             minimum value: 10.
   <test_ip> and <test_port> default values: "auto" and 53. Ip address and port to be checked.
             Please use ip address, not domain name! "auto" indicates your dns servers ip.

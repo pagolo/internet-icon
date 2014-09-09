@@ -7,8 +7,9 @@ INTERNET ICON v. 1.1
 
 INSTALLATION
 ------------
-  Compile and install the application as usual. Download the package from github, this link:
+  Compile and install the application as usual. Download the package from github:
   https://github.com/pagolo/internet-icon/archive/v.1.1.tar.gz
+  (or use the git clone command, if you have git installed)
   unpack the archive and enter the folder internet-icon-v.1.1
   then execute these commands:
   ./configure
@@ -35,6 +36,11 @@ CONFIGURATION
   <wan_ip_page> default value: "ifconfig.me/ip". The url to automatically get your wan ip.
   <user_agent>  default value: "InternetIcon/Getting wan ip". The user agent, as required by the
             "what is my ip" server.
+
+TECHNICAL NOTE
+--------------
+Perhaps it would be better using a ping instead of a real connection; however ping in linux requires
+root previleges, so I chose a normal connection that is immediatly closed.
 
 AUTO STARTING
 -------------

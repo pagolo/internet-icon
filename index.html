@@ -1,0 +1,122 @@
+<!doctype html>
+<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
+<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on http://github.com/jonrohan -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen">
+  <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
+
+  <title>Internet-icon</title>
+  <meta name="description" content="a simple app for linux desktops showing the status of the Internet">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <header>
+      <h1 class="title">Internet-icon</h1>
+    </header>
+    <div id="container">
+      <p class="tagline">a simple app for linux desktops showing the status of the Internet</p>
+      <div id="main" role="main">
+        <div class="download-bar">
+        <div class="inner">
+          <a href="https://github.com/pagolo/internet-icon/tarball/master" class="download-button tar"><span>Download</span></a>
+          <a href="https://github.com/pagolo/internet-icon/zipball/master" class="download-button zip"><span>Download</span></a>
+          <a href="https://github.com/pagolo/internet-icon" class="code">View Internet-icon on GitHub</a>
+        </div>
+        <span class="blc"></span><span class="trc"></span>
+        </div>
+        <article class="markdown-body">
+          <h2>
+<a name="internet-icon-v-11" class="anchor" href="#internet-icon-v-11"><span class="octicon octicon-link"></span></a>INTERNET ICON v. 1.1</h2>
+
+<p>Internet icon is a small desktop application that notifies the user about his internet connection.
+  The application displays a tray icon or shows a notification message, depending on the desktop
+  environment or the user's choice. The software is open source (GPL 3).</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>INSTALLATION</h2>
+
+<p>Compile and install the application as usual. Download the package from the links above
+  (or use the git clone command: <strong>git clone <a href="https://github.com/pagolo/internet-icon">https://github.com/pagolo/internet-icon</a></strong>).
+  If required unpack the archive, enter the project folder and execute these commands:<br><strong>./configure</strong><br><strong>make</strong><br><strong>sudo make install</strong><br>
+  For details see the INSTALL file.</p>
+
+<h2>
+<a name="configuration" class="anchor" href="#configuration"><span class="octicon octicon-link"></span></a>CONFIGURATION</h2>
+
+<p>The first time is launched, the application creates an xml configuration file in the home folder,
+  named ".internet_icon".
+  Normally you can leave it unmodified, in any case you can modify it by hand. Please restart the
+  application if you modify the configuration.<br><em>Tags explanation</em><br>
+  &lt;timeout&gt;<br> default value: 20. Number of seconds between each internet connection check out.
+            minimum value: 10.<br>
+  &lt;test_ip&gt; and &lt;test_port&gt;<br> default values: "auto" and 53. Ip address and port to be checked.
+            Please use ip address, not domain name! "auto" indicates your dns servers ip.
+  &lt;opmode&gt;  default value: "auto". The operational mode, i.e. "status_icon", "notification",
+            or "auto"; "status_icon" displays an icon on the system tray (make sure it is visible),
+            "notification" shows a message when the internet status changes, "auto" displays icon
+            or notification based on program's choice.<br>
+  &lt;wan_ip_page&gt;<br> default value: "ifconfig.me/ip". The url to automatically get your wan ip.<br>
+  &lt;user_agent&gt;<br>  default value: "InternetIcon/Getting wan ip". The user agent, as required by the
+            "what is my ip" server.</p>
+
+<h2>
+<a name="technical-note" class="anchor" href="#technical-note"><span class="octicon octicon-link"></span></a>TECHNICAL NOTE</h2>
+
+<p>Perhaps it would be better using a ping instead of a real connection; however ping in linux requires
+root previleges, so I chose a normal connection that is immediatly closed.</p>
+
+<h2>
+<a name="auto-starting" class="anchor" href="#auto-starting"><span class="octicon octicon-link"></span></a>AUTO STARTING</h2>
+
+<p>You can automatically start the application when desktop session starts, both in Gnome and Kde.
+  Using Gnome run "gnome-session-properties", then add a startup application, specifying full path
+  of the executable code (typically /usr/local/bin/internet_icon).
+  Using Kde create a symbolic link from the same path to .kde/Autostart folder:
+  ln -s /usr/local/bin/internet_icon .kde/Autostart</p>
+
+<h2>
+<a name="translation" class="anchor" href="#translation"><span class="octicon octicon-link"></span></a>TRANSLATION</h2>
+
+<p>By default, only italian translation is present. If you create a translation for your language,
+  please let me know, so I can add your translation to the archive.
+  To generate catalog file, follow these steps:<br><strong>cd </strong><br><strong>cd po</strong><br><strong>make internet_icon.pot</strong><br></p>
+
+<h2>
+<a name="contact" class="anchor" href="#contact"><span class="octicon octicon-link"></span></a>CONTACT</h2>
+
+<p>Author: P. Bozzo (<a href="https://github.com/pagolo" class="user-mention">@pagolo</a>)<br>
+  Email:  pagolo DOT bozzo AT gmail DOT com</p>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="owner">
+      <p><a href="https://github.com/pagolo" class="avatar"><img src="https://avatars3.githubusercontent.com/u/4016222?v=2&amp;s=60" width="48" height="48"></a> <a href="https://github.com/pagolo">pagolo</a> maintains <a href="https://github.com/pagolo/internet-icon">Internet-icon</a></p>
+
+
+      </div>
+      <div class="creds">
+        <small>This page generated using <a href="http://pages.github.com/">GitHub Pages</a><br>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
+      </div>
+    </footer>
+  </div>
+  <div class="current-section">
+    <a href="#top">Scroll to top</a>
+    <a href="https://github.com/pagolo/internet-icon/tarball/master" class="tar">tar</a><a href="https://github.com/pagolo/internet-icon/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
+    <p class="name"></p>
+  </div>
+
+  
+</body>
+</html>

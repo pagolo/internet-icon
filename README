@@ -3,7 +3,7 @@ INTERNET ICON v. 1.1
 --------------------
   Internet icon is a small desktop application that notifies the user about his internet connection.
   The application displays a tray icon or shows a notification message, depending on the desktop
-  environment or the user's choice.
+  environment or the user's choice. The software is open source (GPL 3).
 
 INSTALLATION
 ------------

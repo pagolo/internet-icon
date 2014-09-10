@@ -29,8 +29,8 @@ CONFIGURATION
             minimum value: 10.
   <test_ip> and <test_port> default values: "auto" and 53. Ip address and port to be checked.
             Please use ip address, not domain name! "auto" indicates your dns servers ip.
-  <opmode>  default value: "auto". The operational mode, i.e. "status_icon", "notification",
-            or "auto"; "status_icon" displays an icon on the system tray (make sure it is visible),
+  <opmode>  default value: "auto". The operational mode, i.e. "status-icon", "notification",
+            or "auto"; "status-icon" displays an icon on the system tray (make sure it is visible),
             "notification" shows a message when the internet status changes, "auto" displays icon
             or notification based on program's choice.
   <wan_ip_page> default value: "ifconfig.me/ip". The url to automatically get your wan ip.
